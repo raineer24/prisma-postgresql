@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Response } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -7,16 +7,16 @@ export class AuthController {
 
   @Post('signup')
   signup() {
-    return 'signup route'
+    return 'signup route';
   }
 
-  @Post('signup')
-  signup() {
-    return 'signup route'
+  @Post('signin')
+  signin() {
+    return 'signin route'
   }
 
-  @Post('signup')
-  signup() {
-    return 'signup route'
+  @Get('signout')
+  signout() {
+    return 'signout route'
   }
 }
