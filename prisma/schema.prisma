@@ -9,10 +9,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// model User {
+//   id    String  @unique @default(uuid()) 
+//   email String  @unique
+//   hashedPassword String 
+//   createdAt DateTime @default(now())
+//   updateAt DateTime @updatedAt()
+// }
+
 model User {
-  id    String  @unique @default(uuid()) 
-  email String  @unique
-  hashedPassword String 
+  id String @unique @default(uuid())
+  email String @unique
+  hashedPassword String
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt()
+  updatedAt DateTime @updatedAt()
 }
