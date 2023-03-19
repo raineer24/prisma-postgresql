@@ -27,7 +27,14 @@ export class AuthService {
     return { message: 'User created successfully' };
   }
 
-  async signin() {
+  async signin(dto: AuthDto) {
+    const { email, password } = dto;
+
+    const foundUser = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!foundUser) {
+      throw new BadRequestException('Wrong credentials');
+    }
     return '';
   }
 
