@@ -65,6 +65,12 @@ export class AuthService {
     return res.send({ message: 'Logged in successfully' });
   }
 
+  async signout(req: Request, res: Response) {
+    res.clearCookie('token');
+
+    return res.send({ message: 'Logged out successfully' });
+  }
+
   async hashPassword(password: string) {
     const saltOrRounds = 10;
 
