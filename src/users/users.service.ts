@@ -11,16 +11,19 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async getMyUser(id: string, req: Request) {
-    const decodedUserInfo = req.user as { id: string; email: string };
+    const decodedUserInfo = req.user as { userId: string; email: string };
 
+    console.log('decoded', decodedUserInfo);
     const foundUser = await this.prisma.user.findUnique({ where: { id } });
+
+    console.log('foundUser', foundUser);
 
     if (!foundUser) {
       throw new NotFoundException();
     }
 
-    if (foundUser.id !== decodedUserInfo.id) {
-      throw new NotFoundException();
+    if (foundUser.id !== decodedUserInfo.userId) {
+      throw new ForbiddenException();
     }
 
     delete foundUser.hashedPassword;
