@@ -11,7 +11,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async getMyUser(id: string, req: Request) {
-    console.log('test', req);
+    console.log('test', req.params);
     const decodedUserInfo = req.user as { userId: string; email: string };
 
     console.log('decoded', decodedUserInfo);
