@@ -7,7 +7,7 @@ import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { jwtSecret } from 'src/utils/constants';
+//import { jwtSecret } from 'src/utils/constants';
 import { Request, Response } from 'express';
 @Injectable()
 export class AuthService {
@@ -85,7 +85,7 @@ export class AuthService {
     const payload = args;
 
     return this.jwt.signAsync(payload, {
-      secret: jwtSecret,
+      secret: process.env.JWT_SECRET,
     });
   }
 }
