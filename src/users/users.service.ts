@@ -4,13 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { PrismaService } from '../prisma.service'
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async getMyUser(id: string, req: Request) {
+    console.log('test', req);
     const decodedUserInfo = req.user as { userId: string; email: string };
 
     console.log('decoded', decodedUserInfo);
