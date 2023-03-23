@@ -14,7 +14,21 @@ import { SignupRequest } from './models/request/signup.request';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
-  async register(dto: AuthDto) {}
+  async register(signupRequest: SignupRequest, res: Response) {
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email: signupRequest.email.toLowerCase(),
+          hashedPassword: await bcrypt.hash(signupRequest.password, 10),
+        },
+      });
+
+      console.log('user', user);
+      delete user.hashedPassword;
+
+      return res.send({ user });
+    } catch {}
+  }
 
   async signup(dto: AuthDto) {
     const { email, password } = dto;

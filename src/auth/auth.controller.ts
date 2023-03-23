@@ -24,8 +24,11 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() signupRequest: SignupRequest): Promise<void> {
-    await this.authService.signup(signupRequest);
+  async register(
+    @Body() signupRequest: SignupRequest,
+    @Response() res,
+  ): Promise<void> {
+    await this.authService.register(signupRequest, res);
   }
 
   @Post('signup')
