@@ -9,9 +9,12 @@ import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
 //import { jwtSecret } from 'src/utils/constants';
 import { Request, Response } from 'express';
+import { SignupRequest } from './models/request/signup.request';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
+
+  async register(dto: AuthDto) {}
 
   async signup(dto: AuthDto) {
     const { email, password } = dto;
