@@ -1,7 +1,4 @@
 import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
   Body,
   Controller,
   Get,
@@ -42,10 +39,10 @@ export class AuthController {
     return this.authService.signup(dto);
   }
 
-  @Post('signin')
-  signin(@Body() dto: AuthDto, @Response() res, @Request() req) {
-    return this.authService.signin(dto, req, res);
-  }
+  // @Post('signin')
+  // signin(@Body() dto: AuthDto, @Response() res, @Request() req) {
+  //   return this.authService.signin(dto, req, res);
+  // }
 
   @Get('signout')
   signout(@Request() req, @Response() res) {

@@ -6,6 +6,5 @@ export class LoginRequest {
   identifier: string;
 
   @IsNotEmpty()
-  @MinLength(8)
   password: string;
 }

@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
 import { JwtPayload } from './jwt-payload';
+import { AuthUser } from './auth-user';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -25,6 +26,7 @@ export class AuthService {
         email: true,
       },
     });
+    console.log('user', user);
 
     if (
       user === null ||
@@ -41,19 +43,36 @@ export class AuthService {
     return this.jwt.signAsync(payload);
   }
   async register(signupRequest: SignupRequest, res: Response) {
-    try {
-      const user = await this.prisma.user.create({
-        data: {
-          email: signupRequest.email.toLowerCase(),
-          hashedPassword: await bcrypt.hash(signupRequest.password, 10),
-        },
-      });
+    const foundUser = await this.prisma.user.findUnique({
+      where: { email: signupRequest.email },
+    });
+    console.log('foundUser', foundUser);
 
-      console.log('user', user);
-      delete user.hashedPassword;
+    if (foundUser) {
+      throw new BadRequestException('Email already exists');
+    }
+    const user = await this.prisma.user.create({
+      data: {
+        email: signupRequest.email.toLowerCase(),
+        hashedPassword: await bcrypt.hash(signupRequest.password, 10),
+      },
+    });
 
-      return res.send({ user });
-    } catch {}
+    console.log('user', user);
+    delete user.hashedPassword;
+
+    return res.send({ user });
+  }
+
+  async validateUser(payload: JwtPayload): Promise<AuthUser> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.id },
+    });
+
+    if (user !== null && user.email === payload.email) {
+      return user;
+    }
+    throw new UnauthorizedException();
   }
 
   async signup(dto: AuthDto) {
