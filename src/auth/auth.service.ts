@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
@@ -9,6 +10,7 @@ import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
+import { JwtPayload } from './jwt-payload';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -23,7 +25,14 @@ export class AuthService {
         email: true,
       },
     });
-    return;
+
+    if (
+      user === null ||
+      !bcrypt.compareSync(loginRequest.password, user.hashedPassword)
+    ) {
+      throw new UnauthorizedException();
+    }
+      return;
   }
   async register(signupRequest: SignupRequest, res: Response) {
     try {

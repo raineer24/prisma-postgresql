@@ -37,7 +37,6 @@ export class AuthController {
     return new LoginResponse(await this.authService.login(loginRequest));
   }
 
-
   @Post('signup')
   signup(@Body() dto: AuthDto) {
     return this.authService.signup(dto);
