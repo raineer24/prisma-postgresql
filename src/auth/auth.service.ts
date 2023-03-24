@@ -17,9 +17,8 @@ export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
   async login(loginRequest: LoginRequest): Promise<string> {
-    const normalizedIdentifier = loginRequest.identifier.toLowerCase();
     const user = await this.prisma.user.findFirst({
-      where: { email: normalizedIdentifier },
+      where: { email: loginRequest.email },
       select: {
         id: true,
         hashedPassword: true,
