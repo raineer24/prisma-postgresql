@@ -32,7 +32,13 @@ export class AuthService {
     ) {
       throw new UnauthorizedException();
     }
-      return;
+
+    const payload: JwtPayload = {
+      id: user.id,
+      email: user.email,
+    };
+    console.log('payload', payload);
+    return this.jwt.signAsync(payload);
   }
   async register(signupRequest: SignupRequest, res: Response) {
     try {
@@ -71,36 +77,36 @@ export class AuthService {
     return { message: 'User created successfully' };
   }
 
-  async signin(dto: AuthDto, req: Request, res: Response) {
-    const { email, password } = dto;
+  // async signin(dto: AuthDto, req: Request, res: Response) {
+  //   const { email, password } = dto;
 
-    const foundUser = await this.prisma.user.findUnique({ where: { email } });
+  //   const foundUser = await this.prisma.user.findUnique({ where: { email } });
 
-    if (!foundUser) {
-      throw new BadRequestException('Wrong credentials');
-    }
+  //   if (!foundUser) {
+  //     throw new BadRequestException('Wrong credentials');
+  //   }
 
-    const compareSuccess = await this.comparePasswords({
-      password,
-      hash: foundUser.hashedPassword,
-    });
+  //   const compareSuccess = await this.comparePasswords({
+  //     password,
+  //     hash: foundUser.hashedPassword,
+  //   });
 
-    if (!compareSuccess) {
-      throw new BadRequestException('Wrong credentials');
-    }
-    const token = await this.signToken({
-      userId: foundUser.id,
-      email: foundUser.email,
-    });
+  //   if (!compareSuccess) {
+  //     throw new BadRequestException('Wrong credentials');
+  //   }
+  //   const token = await this.signToken({
+  //     userId: foundUser.id,
+  //     email: foundUser.email,
+  //   });
 
-    if (!token) {
-      throw new ForbiddenException('Could not signin');
-    }
+  //   if (!token) {
+  //     throw new ForbiddenException('Could not signin');
+  //   }
 
-    res.cookie('token', token, {});
+  //   res.cookie('token', token, {});
 
-    return res.send({ message: 'Logged in successfully' });
-  }
+  //   return res.send({ message: 'Logged in successfully' });
+  // }
 
   async signout(req: Request, res: Response) {
     res.clearCookie('token');
