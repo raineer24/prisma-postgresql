@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { SignupRequest } from './models/request/signup.request';
+import { SignupRequest, LoginResponse, LoginRequest } from './models';
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +30,13 @@ export class AuthController {
   ): Promise<void> {
     await this.authService.register(signupRequest, res);
   }
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+    return new LoginResponse(await this.authService.login(loginRequest));
+  }
+
 
   @Post('signup')
   signup(@Body() dto: AuthDto) {

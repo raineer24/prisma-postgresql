@@ -1,1 +1,0 @@
-export { LoginResponse } from './response/login.response';

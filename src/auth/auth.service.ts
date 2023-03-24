@@ -7,13 +7,24 @@ import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
-//import { jwtSecret } from 'src/utils/constants';
 import { Request, Response } from 'express';
-import { SignupRequest } from './models/request/signup.request';
+import { SignupRequest, LoginRequest } from './models/';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
+  async login(loginRequest: LoginRequest): Promise<string> {
+    const normalizedIdentifier = loginRequest.identifier.toLowerCase();
+    const user = await this.prisma.user.findFirst({
+      where: { email: normalizedIdentifier },
+      select: {
+        id: true,
+        hashedPassword: true,
+        email: true,
+      },
+    });
+    return;
+  }
   async register(signupRequest: SignupRequest, res: Response) {
     try {
       const user = await this.prisma.user.create({
