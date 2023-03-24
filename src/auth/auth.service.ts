@@ -55,6 +55,8 @@ export class AuthService {
       data: {
         email: signupRequest.email.toLowerCase(),
         hashedPassword: await bcrypt.hash(signupRequest.password, 10),
+        firstName: signupRequest.firstName,
+        lastName: signupRequest.lastName,
       },
     });
 
@@ -75,26 +77,26 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async signup(dto: AuthDto) {
-    const { email, password } = dto;
+  // async signup(dto: AuthDto) {
+  //   const { email, password } = dto;
 
-    const foundUser = await this.prisma.user.findUnique({ where: { email } });
+  //   const foundUser = await this.prisma.user.findUnique({ where: { email } });
 
-    if (foundUser) {
-      throw new BadRequestException('Email already exists');
-    }
+  //   if (foundUser) {
+  //     throw new BadRequestException('Email already exists');
+  //   }
 
-    const hashedPassword = await this.hashPassword(password);
+  //   const hashedPassword = await this.hashPassword(password);
 
-    await this.prisma.user.create({
-      data: {
-        email,
-        hashedPassword,
-      },
-    });
+  //   await this.prisma.user.create({
+  //     data: {
+  //       email,
+  //       hashedPassword,
+  //     },
+  //   });
 
-    return { message: 'User created successfully' };
-  }
+  //   return { message: 'User created successfully' };
+  // }
 
   // async signin(dto: AuthDto, req: Request, res: Response) {
   //   const { email, password } = dto;

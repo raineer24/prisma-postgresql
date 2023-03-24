@@ -34,10 +34,10 @@ export class AuthController {
     return new LoginResponse(await this.authService.login(loginRequest));
   }
 
-  @Post('signup')
-  signup(@Body() dto: AuthDto) {
-    return this.authService.signup(dto);
-  }
+  // @Post('signup')
+  // signup(@Body() dto: AuthDto) {
+  //   return this.authService.signup(dto);
+  // }
 
   // @Post('signin')
   // signin(@Body() dto: AuthDto, @Response() res, @Request() req) {
