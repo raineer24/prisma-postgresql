@@ -19,16 +19,10 @@ import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
 import { Roles } from '../core/decorators/roles.decorator';
 import User, { UserRole } from '../core/entities/user.entity';
-import { RoleGuard } from 'src/auth/role.guard';
+import { RoleGuard } from '../auth/role.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  //@UseGuards(JwtAuthGuard)
-  // @Get(':id')
-  // getMyUser(@Param() params: { id: string }, @Req() req) {
-  //   return this.usersService.getMyUser(params.id, req);
-  // }
 
   @Get()
   getUsers() {
