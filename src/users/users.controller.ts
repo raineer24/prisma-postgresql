@@ -35,7 +35,7 @@ export class UsersController {
     return this.usersService.getUsers();
   }
   @Roles(UserRole.ADMIN)
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
