@@ -62,7 +62,8 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRequest: UpdateUserRequest,
     @Usr() user: AuthUser,
-  ): Promise<void> {
-    await this.usersService.updateUser(id, updateRequest);
+  ): Promise<UserResponse> {
+    const userInfo = await this.usersService.updateUser(id, updateRequest);
+    return userInfo;
   }
 }
