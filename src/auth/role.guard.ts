@@ -1,8 +1,15 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { UsersService } from '../users/users.service';
 
 import { ROLES_KEY } from '../core/decorators/roles.decorator';
-import { Reflector } from '@nestjs/core';
+
 import { Request } from 'express';
 import { UserRole } from '../core/entities/user.entity';
 
@@ -13,6 +20,7 @@ import { UserRole } from '../core/entities/user.entity';
 export class RoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
+    @Inject(forwardRef(() => UsersService))
     private userService: UsersService,
   ) {}
 
