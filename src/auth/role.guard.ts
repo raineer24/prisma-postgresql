@@ -10,7 +10,6 @@ import { UsersService } from '../users/users.service';
 
 import { ROLES_KEY } from '../core/decorators/roles.decorator';
 
-import { Request } from 'express';
 import { UserRole } from '../core/entities/user.entity';
 
 /**
@@ -25,19 +24,13 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    //const request: Request = context.switchToHttp().getRequest();
-    console.log('roles', roles);
-
     const request = context.switchToHttp().getRequest();
-    console.log('request', request.user);
 
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
 
-    console.log('reqRoles', requiredRoles);
     // If no role is provided
     if (!requiredRoles) {
       return true;

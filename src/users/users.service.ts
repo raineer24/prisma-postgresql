@@ -61,8 +61,6 @@ export class UsersService {
           ...updateRequest,
         },
       });
-      console.log('request', updateRequest);
-      console.log('updateUser', updatedUser);
       return UserResponse.fromUserEntity(updatedUser);
     } catch (err) {
       Logger.error(JSON.stringify(err));
@@ -74,7 +72,6 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({
       where: { id: id },
     });
-    console.log('users service', user);
     return UserResponse.fromUserEntity(user);
   }
 
