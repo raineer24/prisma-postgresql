@@ -17,6 +17,9 @@ import { AuthUser } from '../auth/auth-user';
 import { Usr } from './user.decorator';
 import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
+import { Roles } from '../core/decorators/roles.decorator';
+import User, { UserRole } from '../core/entities/user.entity';
+import { RoleGuard } from 'src/auth/role.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -31,7 +34,8 @@ export class UsersController {
   getUsers() {
     return this.usersService.getUsers();
   }
-
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RoleGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
