@@ -2,6 +2,8 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Logger,
+  ConflictException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PrismaService } from '../prisma.service';
@@ -26,6 +28,24 @@ export class UsersService {
     // }
     // delete foundUser.hashedPassword;
     // return { user: foundUser };
+  }
+
+  async updateUser(
+    userId: number,
+    updateRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    try {
+      const updateUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...updateRequest,
+        },
+      });
+    } catch (err) {
+      Logger.error(JSON.stringify(err));
+      throw new ConflictException();
+    }
+    return;
   }
 
   public async getUserEntityById(id: number): Promise<UserResponse> {
