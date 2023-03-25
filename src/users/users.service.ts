@@ -10,6 +10,7 @@ import { PrismaService } from '../prisma.service';
 import { AuthUser } from '../auth/auth-user';
 import { Usr } from './user.decorator';
 import { UserResponse } from './models/user.response';
+import { UpdateUserRequest } from './models/request/update-user-request.model';
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -35,17 +36,19 @@ export class UsersService {
     updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     try {
-      const updateUser = await this.prisma.user.update({
+      const updatedUser = await this.prisma.user.update({
         where: { id: userId },
         data: {
           ...updateRequest,
         },
       });
+      console.log('request', updateRequest);
+      console.log('updateUser', updatedUser);
+      return UserResponse.fromUserEntity(updatedUser);
     } catch (err) {
       Logger.error(JSON.stringify(err));
       throw new ConflictException();
     }
-    return;
   }
 
   public async getUserEntityById(id: number): Promise<UserResponse> {
@@ -58,7 +61,7 @@ export class UsersService {
 
   async getUsers() {
     return await this.prisma.user.findMany({
-      select: { id: true, email: true },
+      select: { id: true, email: true, firstName: true, lastName: true },
     });
   }
 }
