@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import SwaggerDocumentation from './swagger';
 import { AppModule } from './app.module';
 //import * as cookieParser from 'cookie-parser';
 import cookieParser from 'cookie-parser';
@@ -17,6 +18,8 @@ async function bootstrap() {
   // });
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  const swaggerDoc = new SwaggerDocumentation(app);
+  swaggerDoc.serve();
   await app.listen(5000);
 }
 bootstrap();

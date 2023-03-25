@@ -15,6 +15,8 @@ export class UserResponse {
 
   updatedAt: Date; // ISO Date
 
+  role: string;
+
   static fromUserEntity(entity: User): UserResponse {
     const response = new UserResponse();
     response.id = entity.id;
@@ -24,6 +26,7 @@ export class UserResponse {
     response.image = entity.image;
     response.createdAt = entity.createdAt;
     response.lastName = entity.lastName;
+    response.role = entity.role;
     return response;
   }
 }

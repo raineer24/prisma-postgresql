@@ -17,6 +17,9 @@ import { AuthUser } from '../auth/auth-user';
 import { Usr } from './user.decorator';
 import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
+import { Roles } from '../core/decorators/roles.decorator';
+import User, { UserRole } from '../core/entities/user.entity';
+import { RoleGuard } from 'src/auth/role.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -32,6 +35,16 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @Put(':id/role')
+  async updateRoleOfUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRequest: UpdateUserRequest,
+  ): Promise<void> {
+    await this.usersService.updateRoleOfUser(id, updateRequest);
+  }
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
@@ -49,7 +62,8 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRequest: UpdateUserRequest,
     @Usr() user: AuthUser,
-  ): Promise<void> {
-    await this.usersService.updateUser(id, updateRequest);
+  ): Promise<UserResponse> {
+    const userInfo = await this.usersService.updateUser(id, updateRequest);
+    return userInfo;
   }
 }
