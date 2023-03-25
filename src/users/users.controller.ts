@@ -33,8 +33,13 @@ export class UsersController {
   async updateRoleOfUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRequest: UpdateUserRequest,
-  ): Promise<void> {
-    await this.usersService.updateRoleOfUser(id, updateRequest);
+  ): Promise<UserResponse> {
+    const updateRole = await this.usersService.updateRoleOfUser(
+      id,
+      updateRequest,
+    );
+
+    return updateRole;
   }
 
   @Roles(UserRole.ADMIN)

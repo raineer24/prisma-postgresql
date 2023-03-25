@@ -15,22 +15,6 @@ import { UpdateUserRequest } from './models/request/update-user-request.model';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getMyUser(id: string, req: Request) {
-    // console.log('test', req);
-    // const decodedUserInfo = req.user as { userId: string; email: string };
-    // console.log('decoded', decodedUserInfo);
-    // const foundUser = await this.prisma.user.findUnique({ where: { id } });
-    // console.log('foundUser', foundUser);
-    // if (!foundUser) {
-    //   throw new NotFoundException();
-    // }
-    // if (foundUser.id !== decodedUserInfo.userId) {
-    //   throw new ForbiddenException();
-    // }
-    // delete foundUser.hashedPassword;
-    // return { user: foundUser };
-  }
-
   async updateRoleOfUser(
     userId: number,
     updateRequest: UpdateUserRequest,
@@ -42,7 +26,7 @@ export class UsersService {
           id: userId,
         },
       });
-      console.log('updateRole', updatedRole);
+
       return UserResponse.fromUserEntity(updatedRole);
     } catch (err) {
       Logger.error(JSON.stringify(err));
