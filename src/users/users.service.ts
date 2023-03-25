@@ -31,6 +31,25 @@ export class UsersService {
     // return { user: foundUser };
   }
 
+  async updateRoleOfUser(
+    userId: number,
+    updateRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    try {
+      const updatedRole = await this.prisma.user.update({
+        data: { ...updateRequest },
+        where: {
+          id: userId,
+        },
+      });
+      console.log('updateRole', updatedRole);
+      return UserResponse.fromUserEntity(updatedRole);
+    } catch (err) {
+      Logger.error(JSON.stringify(err));
+      throw new ConflictException();
+    }
+  }
+
   async updateUser(
     userId: number,
     updateRequest: UpdateUserRequest,

@@ -34,6 +34,15 @@ export class UsersController {
   getUsers() {
     return this.usersService.getUsers();
   }
+
+  @Put(':id/role')
+  async updateRoleOfUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRequest: UpdateUserRequest,
+  ): Promise<void> {
+    await this.usersService.updateRoleOfUser(id, updateRequest);
+  }
+
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')

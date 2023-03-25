@@ -22,4 +22,7 @@ export class UpdateUserRequest {
   @IsOptional()
   @IsUrl()
   image?: string;
+
+  @IsOptional()
+  role?: string;
 }
