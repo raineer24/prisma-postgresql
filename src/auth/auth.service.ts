@@ -16,12 +16,6 @@ import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
 import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
-import {
-  IPageOptions,
-  PageOptionsPipe,
-  Page,
-  PageMeta,
-} from '../helpers/pagination';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -87,28 +81,6 @@ export class AuthService {
         hashedPassword: hashedRt,
       },
     });
-  }
-
-  async paginate(options: IPageOptions) {
-    const [count, users] = await this.prisma.$transaction([
-      this.prisma.user.count(),
-      this.prisma.user.findMany({
-        take: options.take,
-        skip: 10 * (options.page - 1),
-        orderBy: {
-          [options.orderBy]: options.order,
-        },
-        where: {
-          firstName: {
-            contains: options.search,
-            mode: 'insensitive',
-          },
-        },
-      }),
-    ]);
-    const pageMeta = new PageMeta({ pageOptions: options, itemCount: count });
-    const page = new Page(users, pageMeta);
-    return page;
   }
 
   async register(signupRequest: SignupRequest, res: Response) {
