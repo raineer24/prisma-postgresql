@@ -13,9 +13,85 @@ import { SignupRequest, LoginRequest } from './models/';
 import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
 import { UserRole } from 'src/core/entities/user.entity';
+import { Tokens } from './types/tokens.types';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
+
+  async signinLocal(signinDto: LoginRequest) {
+    const userData = await this.prisma.user.findUnique({
+      where: {
+        email: signinDto.email,
+      },
+      select: {
+        id: true,
+        hashedPassword: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+
+    if (!userData) {
+      throw new ForbiddenException('There is no user with this email');
+    }
+
+    const passwordMatches = await bcrypt.compare(
+      signinDto.password,
+      userData.hashedPassword,
+    );
+
+    console.log('passwordm', userData);
+    if (!passwordMatches) {
+      throw new ForbiddenException('Incorrect password');
+    }
+
+    const tokens = await this.getTokens(userData.id, userData.email);
+    //await this.updateRtHash(userData.id, tokens.access_token);
+
+    delete userData.hashedPassword;
+
+    return {
+      userData,
+      ...tokens,
+    };
+  }
+
+  async getTokens(userId: number, email: string): Promise<Tokens> {
+    const payload: JwtPayload = {
+      id: userId,
+      email: email,
+    };
+
+    // const [access_token, refresh_token] = await Promise.all([
+    //   this.jwtService.signAsync(jwtPayload, {
+    //     secret: this.config.get<string>('AT_SECRET'),
+    //     expiresIn: '15m',
+    //   }),
+    //   this.jwtService.signAsync(jwtPayload, {
+    //     secret: this.config.get<string>('RT_SECRET'),
+    //     expiresIn: '7d',
+    //   }),
+    // ]);
+
+    const access_token = await this.jwt.signAsync(payload);
+    console.log('access_token', access_token);
+    return {
+      access_token,
+    };
+  }
+
+  async updateRtHash(userId: number, access_token: string): Promise<void> {
+    const hashedRt = await bcrypt.hash(access_token, 10);
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedPassword: hashedRt,
+      },
+    });
+  }
 
   async login(loginRequest: LoginRequest): Promise<string> {
     const user = await this.prisma.user.findFirst({
@@ -42,6 +118,7 @@ export class AuthService {
     console.log('payload', payload);
     return this.jwt.signAsync(payload);
   }
+
   async register(signupRequest: SignupRequest, res: Response) {
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
@@ -77,58 +154,6 @@ export class AuthService {
     }
     throw new UnauthorizedException();
   }
-
-  // async signup(dto: AuthDto) {
-  //   const { email, password } = dto;
-
-  //   const foundUser = await this.prisma.user.findUnique({ where: { email } });
-
-  //   if (foundUser) {
-  //     throw new BadRequestException('Email already exists');
-  //   }
-
-  //   const hashedPassword = await this.hashPassword(password);
-
-  //   await this.prisma.user.create({
-  //     data: {
-  //       email,
-  //       hashedPassword,
-  //     },
-  //   });
-
-  //   return { message: 'User created successfully' };
-  // }
-
-  // async signin(dto: AuthDto, req: Request, res: Response) {
-  //   const { email, password } = dto;
-
-  //   const foundUser = await this.prisma.user.findUnique({ where: { email } });
-
-  //   if (!foundUser) {
-  //     throw new BadRequestException('Wrong credentials');
-  //   }
-
-  //   const compareSuccess = await this.comparePasswords({
-  //     password,
-  //     hash: foundUser.hashedPassword,
-  //   });
-
-  //   if (!compareSuccess) {
-  //     throw new BadRequestException('Wrong credentials');
-  //   }
-  //   const token = await this.signToken({
-  //     userId: foundUser.id,
-  //     email: foundUser.email,
-  //   });
-
-  //   if (!token) {
-  //     throw new ForbiddenException('Could not signin');
-  //   }
-
-  //   res.cookie('token', token, {});
-
-  //   return res.send({ message: 'Logged in successfully' });
-  // }
 
   async signout(req: Request, res: Response) {
     res.clearCookie('token');

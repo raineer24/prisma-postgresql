@@ -14,7 +14,7 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { SignupRequest, LoginResponse, LoginRequest } from './models';
-
+import { AuthResponse } from './types';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -33,6 +33,12 @@ export class AuthController {
   async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
     return new LoginResponse(await this.authService.login(loginRequest));
   }
+
+  @Post('local/signin')
+  signinLocal(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
+    return this.authService.signinLocal(signinDto);
+  }
+
   @Get('signout')
   signout(@Request() req, @Response() res) {
     return this.authService.signout(req, res);
