@@ -10,6 +10,7 @@ import {
   Body,
   UnauthorizedException,
   Put,
+  Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { UsersService } from './users.service';
@@ -23,6 +24,15 @@ import { RoleGuard } from '../auth/role.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('pages?')
+  async findAll(@Request() request) {
+    return await this.usersService.findAll(
+      request.query.hasOwnProperty('page') ? request.query.page : 0,
+      request.query.hasOwnProperty('size') ? request.query.size : 10,
+      request.query.hasOwnProperty('search') ? request.query.search : '',
+    );
+  }
 
   @Get()
   getUsers() {

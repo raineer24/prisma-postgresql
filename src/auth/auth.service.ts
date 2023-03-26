@@ -1,7 +1,9 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Get,
   Injectable,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
@@ -12,7 +14,7 @@ import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
 import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
-import { UserRole } from 'src/core/entities/user.entity';
+import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
 @Injectable()
 export class AuthService {
@@ -62,18 +64,6 @@ export class AuthService {
       id: userId,
       email: email,
     };
-
-    // const [access_token, refresh_token] = await Promise.all([
-    //   this.jwtService.signAsync(jwtPayload, {
-    //     secret: this.config.get<string>('AT_SECRET'),
-    //     expiresIn: '15m',
-    //   }),
-    //   this.jwtService.signAsync(jwtPayload, {
-    //     secret: this.config.get<string>('RT_SECRET'),
-    //     expiresIn: '7d',
-    //   }),
-    // ]);
-
     const access_token = await this.jwt.signAsync(payload);
     console.log('access_token', access_token);
     return {
@@ -92,32 +82,6 @@ export class AuthService {
       },
     });
   }
-
-  // async login(loginRequest: LoginRequest): Promise<string> {
-  //   const user = await this.prisma.user.findFirst({
-  //     where: { email: loginRequest.email },
-  //     select: {
-  //       id: true,
-  //       hashedPassword: true,
-  //       email: true,
-  //     },
-  //   });
-  //   console.log('user', user);
-
-  //   if (
-  //     user === null ||
-  //     !bcrypt.compareSync(loginRequest.password, user.hashedPassword)
-  //   ) {
-  //     throw new UnauthorizedException();
-  //   }
-
-  //   const payload: JwtPayload = {
-  //     id: user.id,
-  //     email: user.email,
-  //   };
-  //   console.log('payload', payload);
-  //   return this.jwt.signAsync(payload);
-  // }
 
   async register(signupRequest: SignupRequest, res: Response) {
     const foundUser = await this.prisma.user.findUnique({
