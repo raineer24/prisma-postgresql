@@ -15,6 +15,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { SignupRequest, LoginResponse, LoginRequest } from './models';
 import { AuthResponse } from './types';
+import { IPageOptions, PageOptionsPipe } from '../helpers/pagination';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -28,12 +29,10 @@ export class AuthController {
     await this.authService.register(signupRequest, res);
   }
 
-  // @Post('login')
-  // @HttpCode(HttpStatus.OK)
-  // async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-  //   return new LoginResponse(await this.authService.login(loginRequest));
-  // }
-
+  @Get()
+  paginate(@Query(new PageOptionsPipe()) options: IPageOptions) {
+    return this.usersService.paginate(options);
+  }
   @Post('login')
   signinLocal(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
     return this.authService.signinLocal(signinDto);
