@@ -31,7 +31,7 @@ export class AuthController {
 
   @Get()
   paginate(@Query(new PageOptionsPipe()) options: IPageOptions) {
-    return this.usersService.paginate(options);
+    return this.authService.paginate(options);
   }
   @Post('login')
   signinLocal(@Body() signinDto: LoginRequest): Promise<AuthResponse> {

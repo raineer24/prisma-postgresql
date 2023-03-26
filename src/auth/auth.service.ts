@@ -1,7 +1,9 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Get,
   Injectable,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
@@ -12,8 +14,14 @@ import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
 import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
-import { UserRole } from 'src/core/entities/user.entity';
+import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
+import {
+  IPageOptions,
+  PageOptionsPipe,
+  Page,
+  PageMeta,
+} from '../helpers/pagination';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -62,18 +70,6 @@ export class AuthService {
       id: userId,
       email: email,
     };
-
-    // const [access_token, refresh_token] = await Promise.all([
-    //   this.jwtService.signAsync(jwtPayload, {
-    //     secret: this.config.get<string>('AT_SECRET'),
-    //     expiresIn: '15m',
-    //   }),
-    //   this.jwtService.signAsync(jwtPayload, {
-    //     secret: this.config.get<string>('RT_SECRET'),
-    //     expiresIn: '7d',
-    //   }),
-    // ]);
-
     const access_token = await this.jwt.signAsync(payload);
     console.log('access_token', access_token);
     return {
@@ -93,7 +89,27 @@ export class AuthService {
     });
   }
 
- 
+  async paginate(options: IPageOptions) {
+    const [count, users] = await this.prisma.$transaction([
+      this.prisma.user.count(),
+      this.prisma.user.findMany({
+        take: options.take,
+        skip: 10 * (options.page - 1),
+        // orderBy: {
+        //   [<keyof users>options.orderBy]: options.order,
+        // },
+        where: {
+          firstName: {
+            contains: options.search,
+            mode: 'insensitive',
+          },
+        },
+      }),
+    ]);
+    const pageMeta = new PageMeta({ pageOptions: options, itemCount: count })
+    const page = new Page(users, pageMeta)
+    return page;
+  }
 
   async register(signupRequest: SignupRequest, res: Response) {
     const foundUser = await this.prisma.user.findUnique({
