@@ -95,9 +95,9 @@ export class AuthService {
       this.prisma.user.findMany({
         take: options.take,
         skip: 10 * (options.page - 1),
-        // orderBy: {
-        //   [<keyof users>options.orderBy]: options.order,
-        // },
+        orderBy: {
+          [options.orderBy]: options.order,
+        },
         where: {
           firstName: {
             contains: options.search,
@@ -106,8 +106,8 @@ export class AuthService {
         },
       }),
     ]);
-    const pageMeta = new PageMeta({ pageOptions: options, itemCount: count })
-    const page = new Page(users, pageMeta)
+    const pageMeta = new PageMeta({ pageOptions: options, itemCount: count });
+    const page = new Page(users, pageMeta);
     return page;
   }
 

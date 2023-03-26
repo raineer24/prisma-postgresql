@@ -5,8 +5,13 @@ export interface IPageOptions {
   take: number;
   search?: string;
   orderBy?: string;
-  order?: 'asc' | 'desc';
+  order?: keyof typeof SORT_ORDER;
 }
+
+export const SORT_ORDER = {
+  asc: 'asc',
+  desc: 'desc',
+} as const;
 
 export interface IPageMeta {
   currentPage: number;
