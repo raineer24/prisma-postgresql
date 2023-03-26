@@ -1,4 +1,5 @@
 import type { User } from '@prisma/client';
+import { UserRole } from 'src/core/entities/user.entity';
 
 export class UserResponse {
   id: number;

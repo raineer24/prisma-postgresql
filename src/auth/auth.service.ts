@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
 import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
+import { UserRole } from 'src/core/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -45,7 +46,7 @@ export class AuthService {
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
     });
-    console.log(' yawasfoundUser', foundUser);
+    console.log('foundUser', foundUser);
 
     if (foundUser) {
       throw new BadRequestException('Email already exists');
@@ -56,6 +57,7 @@ export class AuthService {
         hashedPassword: await bcrypt.hash(signupRequest.password, 10),
         firstName: signupRequest.firstName,
         lastName: signupRequest.lastName,
+        role: UserRole.USER,
       },
     });
 
