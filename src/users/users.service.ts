@@ -11,9 +11,31 @@ import { AuthUser } from '../auth/auth-user';
 import { Usr } from './user.decorator';
 import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
+import { Paginate } from './paginate/paginate';
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private paginate: Paginate) {}
+
+  async findAll(page: number, size: number, search: string) {
+    const { results, totalItems } = await this.paginate.pages(
+      page,
+      size,
+      search,
+    );
+    const totalPages = Math.ceil(totalItems / size) - 1;
+    const currentPage = Number(page);
+    return {
+      results,
+      pagination: {
+        length: totalItems,
+        size: size,
+        lastPage: totalPages,
+        page: currentPage,
+        startIndex: currentPage * size,
+        endIndex: currentPage * size + (size - 1),
+      },
+    };
+  }
 
   async updateRoleOfUser(
     userId: number,
