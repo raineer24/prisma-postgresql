@@ -93,31 +93,31 @@ export class AuthService {
     });
   }
 
-  async login(loginRequest: LoginRequest): Promise<string> {
-    const user = await this.prisma.user.findFirst({
-      where: { email: loginRequest.email },
-      select: {
-        id: true,
-        hashedPassword: true,
-        email: true,
-      },
-    });
-    console.log('user', user);
+  // async login(loginRequest: LoginRequest): Promise<string> {
+  //   const user = await this.prisma.user.findFirst({
+  //     where: { email: loginRequest.email },
+  //     select: {
+  //       id: true,
+  //       hashedPassword: true,
+  //       email: true,
+  //     },
+  //   });
+  //   console.log('user', user);
 
-    if (
-      user === null ||
-      !bcrypt.compareSync(loginRequest.password, user.hashedPassword)
-    ) {
-      throw new UnauthorizedException();
-    }
+  //   if (
+  //     user === null ||
+  //     !bcrypt.compareSync(loginRequest.password, user.hashedPassword)
+  //   ) {
+  //     throw new UnauthorizedException();
+  //   }
 
-    const payload: JwtPayload = {
-      id: user.id,
-      email: user.email,
-    };
-    console.log('payload', payload);
-    return this.jwt.signAsync(payload);
-  }
+  //   const payload: JwtPayload = {
+  //     id: user.id,
+  //     email: user.email,
+  //   };
+  //   console.log('payload', payload);
+  //   return this.jwt.signAsync(payload);
+  // }
 
   async register(signupRequest: SignupRequest, res: Response) {
     const foundUser = await this.prisma.user.findUnique({

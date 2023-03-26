@@ -28,13 +28,13 @@ export class AuthController {
     await this.authService.register(signupRequest, res);
   }
 
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-    return new LoginResponse(await this.authService.login(loginRequest));
-  }
+  // @Post('login')
+  // @HttpCode(HttpStatus.OK)
+  // async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+  //   return new LoginResponse(await this.authService.login(loginRequest));
+  // }
 
-  @Post('local/signin')
+  @Post('login')
   signinLocal(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
     return this.authService.signinLocal(signinDto);
   }
