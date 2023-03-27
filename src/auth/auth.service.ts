@@ -31,6 +31,7 @@ export class AuthService {
         email: true,
         firstName: true,
         lastName: true,
+        username: true,
       },
     });
 
