@@ -11,5 +11,5 @@ ALTER TABLE "users" ADD COLUMN     "username" TEXT NOT NULL;
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
-INSERT INTO users ("firstName", "lastName", email, "hashedPassword", "username")
-VALUES ('John Doe', 't31e', 'johndoe@gmail.com', '12313', 'johdoe125');
+-- INSERT INTO users ("firstName", "lastName", email, "hashedPassword", username")
+-- VALUES ('John Doe', 't31e', 'johndoe@gmail.com', '12313', 'johdoe125');
