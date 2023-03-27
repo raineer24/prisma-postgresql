@@ -40,7 +40,6 @@ export class UsersController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './images',
         filename: (req, file, cb) => {
           cb(null, file.originalname);
         },
@@ -56,7 +55,7 @@ export class UsersController {
     //   request.body.phone_number != undefined
     // ) {
     const user: UserResponse = request['user'];
-    console.log('request!!', typeof user.id);
+    console.log('request!!', request['file']);
 
     //   return await this.usersService.setProfile(file, id);
     // } else {
