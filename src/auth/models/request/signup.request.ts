@@ -24,4 +24,7 @@ export class SignupRequest {
   @Matches(RegExp('^[A-Za-zıöüçğşİÖÜÇĞŞñÑáéíóúÁÉÍÓÚ ]+$'))
   @MaxLength(20)
   lastName: string;
+
+  @IsNotEmpty()
+  username: string;
 }

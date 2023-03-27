@@ -98,6 +98,7 @@ export class AuthService {
         hashedPassword: await bcrypt.hash(signupRequest.password, 10),
         firstName: signupRequest.firstName,
         lastName: signupRequest.lastName,
+        username: signupRequest.username,
         role: UserRole.USER,
       },
     });
