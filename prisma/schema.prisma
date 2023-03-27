@@ -26,7 +26,7 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt()
   image          String?
-  role           String   @default("basic")
+  role           String   @default("user")
 
   @@map("users")
 }

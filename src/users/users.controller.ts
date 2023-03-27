@@ -11,6 +11,10 @@ import {
   UnauthorizedException,
   Put,
   Request,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  HttpException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { UsersService } from './users.service';
@@ -21,9 +25,48 @@ import { UpdateUserRequest } from './models/request/update-user-request.model';
 import { Roles } from '../core/decorators/roles.decorator';
 import User, { UserRole } from '../core/entities/user.entity';
 import { RoleGuard } from '../auth/role.guard';
+import { ApiConsumes } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+//import { Request } from 'express';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  @UseGuards(JwtAuthGuard)
+  @Post('profile-setup')
+  @HttpCode(200)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async setProfile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() request: Request,
+  ): Promise<any> {
+    // if (
+    //   request.body.phone_number != null ||
+    //   request.body.phone_number != undefined
+    // ) {
+    const user: UserResponse = request['user'];
+    console.log('request!!', request['file']);
+
+    //   return await this.usersService.setProfile(file, id);
+    // } else {
+    //   return new HttpException(
+    //     'Phone number is required',
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
+
+    return await this.usersService.setProfile(file, user.id);
+  }
 
   @Get('pages?')
   async findAll(@Request() request) {
