@@ -26,6 +26,5 @@ export class SignupRequest {
   lastName: string;
 
   @IsNotEmpty()
-  @Matches(RegExp('^[A-Za-zıöüçğşİÖÜÇĞŞñÑáéíóúÁÉÍÓÚ ]+$'))
   username: string;
 }
