@@ -27,7 +27,13 @@ export class UsersService {
     if (!file) {
       throw new HttpException('Image is required', 400);
     }
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    console.log('user!', user);
     const profileImage = await this.cloudinaryService.uploadFile(file);
+    console.log('profileimage', profileImage);
     return await this.prisma.user.update({
       where: {
         id: userId,

@@ -22,10 +22,11 @@ export class CloudinaryService {
       api_secret: 'OEJwFk8xMOuNID7Z7L5MNDJ9nY8',
     });
     const config = v2.uploader.upload(file.path, {
-      folder: 'sajha-book',
+      folder: 'raineer',
       use_filename: true,
       unique_filename: false,
     });
+    console.log('config', config);
     return config;
   }
 }
