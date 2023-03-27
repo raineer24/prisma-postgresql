@@ -4,6 +4,8 @@ import {
   NotFoundException,
   Logger,
   ConflictException,
+  UploadedFile,
+  HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PrismaService } from '../prisma.service';
@@ -12,9 +14,29 @@ import { Usr } from './user.decorator';
 import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
 import { Paginate } from './paginate/paginate';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService, private paginate: Paginate) {}
+  constructor(
+    private prisma: PrismaService,
+    private paginate: Paginate,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
+
+  async setProfile(@UploadedFile() file: Express.Multer.File, userId: number) {
+    if (!file) {
+      throw new HttpException('Image is required', 400);
+    }
+    const profileImage = await this.cloudinaryService.uploadFile(file);
+    return await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        image: profileImage.url,
+      },
+    });
+  }
 
   async findAll(page: number, size: number, search: string) {
     const { results, totalItems } = await this.paginate.pages(
