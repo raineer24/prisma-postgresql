@@ -28,8 +28,7 @@ import { RoleGuard } from '../auth/role.guard';
 import { ApiConsumes } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
-//import { Request } from 'express';
-
+import { UserIsUserGuard } from '../auth/UserIsUser.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -108,6 +107,7 @@ export class UsersController {
     return userId;
   }
 
+  @UseGuards(JwtAuthGuard, UserIsUserGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
