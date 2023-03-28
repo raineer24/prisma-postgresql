@@ -12,6 +12,8 @@ export class UserResponse {
 
   image: string | null;
 
+  username: string;
+
   createdAt: Date | null; // ISO Date
 
   updatedAt: Date; // ISO Date
@@ -23,7 +25,7 @@ export class UserResponse {
     response.id = entity.id;
 
     response.email = entity.email;
-
+    response.username = entity.username;
     response.image = entity.image;
     response.createdAt = entity.createdAt;
     response.lastName = entity.lastName;

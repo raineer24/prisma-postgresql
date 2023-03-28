@@ -25,4 +25,7 @@ export class UpdateUserRequest {
 
   @IsOptional()
   role?: string;
+
+  @IsNotEmpty()
+  username?: string;
 }

@@ -105,13 +105,6 @@ export class UsersService {
     return UserResponse.fromUserEntity(user);
   }
 
-  async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: id },
-    });
-    return user;
-  }
-
   async getUsers() {
     return await this.prisma.user.findMany({
       select: {
