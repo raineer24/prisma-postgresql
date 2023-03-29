@@ -114,6 +114,7 @@ export class UsersService {
         lastName: true,
         role: true,
         username: true,
+        image: true,
       },
     });
   }
