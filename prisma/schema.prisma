@@ -19,7 +19,7 @@ datasource db {
 model User {
   id             Int      @id @default(autoincrement())
   email          String   @unique
-  username       String?   @unique
+  username       String?  @unique
   firstName      String
   lastName       String
   hashedPassword String
@@ -29,4 +29,11 @@ model User {
   role           String   @default("user")
 
   @@map("users")
+}
+
+model ChekiEditedImage {
+  createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+
+  @@map("ChekiEditedImage")
 }

@@ -54,8 +54,9 @@ export class UsersController {
     //   request.body.phone_number != null ||
     //   request.body.phone_number != undefined
     // ) {
-    const user: UserResponse = request['user'];
-    console.log('request!!', request['file']);
+    // const user: UserResponse = request['user'];
+    console.log('requestFILE!!', request['file']);
+    console.log('request!!', request);
 
     //   return await this.usersService.setProfile(file, id);
     // } else {
@@ -65,7 +66,7 @@ export class UsersController {
     //   );
     // }
 
-    return await this.usersService.setProfile(file, user.id);
+    // return await this.usersService.setProfile(file, user.id);
   }
 
   // @UseGuards(JwtAuthGuard)

@@ -15,6 +15,7 @@ import { UserResponse } from './models/user.response';
 import { UpdateUserRequest } from './models/request/update-user-request.model';
 import { Paginate } from './paginate/paginate';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { getCloudinaryPublicId } from 'src/utils/cheki';
 @Injectable()
 export class UsersService {
   constructor(
@@ -23,21 +24,24 @@ export class UsersService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async setProfile(@UploadedFile() file: Express.Multer.File, userId: number) {
+  async setProfile(@UploadedFile() file: Express.Multer.File) {
+    const { id } = await this.prisma.chekiEditedImage.create({
+      data: {},
+    });
     if (!file) {
       throw new HttpException('Image is required', 400);
     }
 
-    const profileImage = await this.cloudinaryService.uploadFile(file);
-    console.log('profileimage', profileImage);
-    return await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        image: profileImage.url,
-      },
-    });
+    try {
+      const profileImage = await this.cloudinaryService.uploadFile(file, {
+        public_id: getCloudinaryPublicId(id),
+      });
+      console.log('profileimage', profileImage);
+    } catch (error) {
+      console.log('error', error);
+    }
+
+    // const profileImage = await this.cloudinaryService.uploadFile(file);
   }
 
   // async setProfile(@UploadedFile() file: Express.Multer.File, userId: number) {
