@@ -35,5 +35,5 @@ model ChekiEditedImage {
   createdAt DateTime @default(now())
   id        String   @id @default(uuid())
 
-  @@map("ChekiEditedImage")
+  @@map("chekiEditedimage")
 }
