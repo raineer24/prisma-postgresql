@@ -26,7 +26,7 @@ export class UserResponse {
 
     response.email = entity.email;
     response.username = entity.username;
-    response.image = entity.image;
+    // response.image = entity.image;
     response.createdAt = entity.createdAt;
     response.lastName = entity.lastName;
     response.role = entity.role;
