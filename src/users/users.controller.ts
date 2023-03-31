@@ -32,6 +32,42 @@ import { UserIsUserGuard } from '../auth/UserIsUser.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile-setup')
+  @HttpCode(200)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async setProfile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() request: Request,
+  ): Promise<any> {
+    // if (
+    //   request.body.phone_number != null ||
+    //   request.body.phone_number != undefined
+    // ) {
+    const user: UserResponse = request['user'];
+    console.log('request!!', request['file']);
+
+    //   return await this.usersService.setProfile(file, id);
+    // } else {
+    //   return new HttpException(
+    //     'Phone number is required',
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
+
+    return await this.usersService.setProfile(file, user.id);
+  }
+
   // @UseGuards(JwtAuthGuard)
   // @Post('profile-setup')
   // @HttpCode(200)

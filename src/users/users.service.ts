@@ -23,6 +23,23 @@ export class UsersService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  async setProfile(@UploadedFile() file: Express.Multer.File, userId: number) {
+    if (!file) {
+      throw new HttpException('Image is required', 400);
+    }
+
+    const profileImage = await this.cloudinaryService.uploadFile(file);
+    console.log('profileimage', profileImage);
+    return await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        image: profileImage.url,
+      },
+    });
+  }
+
   // async setProfile(@UploadedFile() file: Express.Multer.File, userId: number) {
   //   if (!file) {
   //     throw new HttpException('Image is required', 400);
