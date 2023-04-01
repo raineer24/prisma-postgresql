@@ -16,6 +16,7 @@ import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
 import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
+import { UserType } from '@prisma/client';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
@@ -100,7 +101,7 @@ export class AuthService {
         firstName: signupRequest.firstName,
         lastName: signupRequest.lastName,
         username: signupRequest.username,
-        role: UserRole.USER,
+        role: UserType.USER,
       },
     });
 
