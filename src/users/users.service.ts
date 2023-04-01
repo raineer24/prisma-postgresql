@@ -59,42 +59,42 @@ export class UsersService {
     };
   }
 
-  async updateRoleOfUser(
-    userId: number,
-    updateRequest: UpdateUserRequest,
-  ): Promise<UserResponse> {
-    try {
-      const updatedRole = await this.prisma.user.update({
-        data: { ...updateRequest },
-        where: {
-          id: userId,
-        },
-      });
+  // async updateRoleOfUser(
+  //   userId: number,
+  //   updateRequest: UpdateUserRequest,
+  // ): Promise<UserResponse> {
+  //   try {
+  //     const updatedRole = await this.prisma.user.update({
+  //       data: { ...updateRequest },
+  //       where: {
+  //         id: userId,
+  //       },
+  //     });
 
-      return UserResponse.fromUserEntity(updatedRole);
-    } catch (err) {
-      Logger.error(JSON.stringify(err));
-      throw new ConflictException();
-    }
-  }
+  //     return UserResponse.fromUserEntity(updatedRole);
+  //   } catch (err) {
+  //     Logger.error(JSON.stringify(err));
+  //     throw new ConflictException();
+  //   }
+  // }
 
-  async updateUser(
-    userId: number,
-    updateRequest: UpdateUserRequest,
-  ): Promise<UserResponse> {
-    try {
-      const updatedUser = await this.prisma.user.update({
-        where: { id: userId },
-        data: {
-          ...updateRequest,
-        },
-      });
-      return UserResponse.fromUserEntity(updatedUser);
-    } catch (err) {
-      Logger.error(JSON.stringify(err));
-      throw new ConflictException();
-    }
-  }
+  // async updateUser(
+  //   userId: number,
+  //   updateRequest: UpdateUserRequest,
+  // ): Promise<UserResponse> {
+  //   try {
+  //     const updatedUser = await this.prisma.user.update({
+  //       where: { id: userId },
+  //       data: {
+  //         ...updateRequest,
+  //       },
+  //     });
+  //     return UserResponse.fromUserEntity(updatedUser);
+  //   } catch (err) {
+  //     Logger.error(JSON.stringify(err));
+  //     throw new ConflictException();
+  //   }
+  // }
 
   public async getUserEntityById(id: number): Promise<UserResponse> {
     const user = await this.prisma.user.findUnique({

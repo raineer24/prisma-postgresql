@@ -59,18 +59,18 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
-  @Put(':id/role')
-  async updateRoleOfUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateRequest: UpdateUserRequest,
-  ): Promise<UserResponse> {
-    const updateRole = await this.usersService.updateRoleOfUser(
-      id,
-      updateRequest,
-    );
+  // @Put(':id/role')
+  // async updateRoleOfUser(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() updateRequest: UpdateUserRequest,
+  // ): Promise<UserResponse> {
+  //   const updateRole = await this.usersService.updateRoleOfUser(
+  //     id,
+  //     updateRequest,
+  //   );
 
-    return updateRole;
-  }
+  //   return updateRole;
+  // }
 
   //@Roles(UserRole.ADMIN)
   //@UseGuards(JwtAuthGuard, RoleGuard)
@@ -86,14 +86,14 @@ export class UsersController {
   }
 
   //@UseGuards(JwtAuthGuard, UserIsUserGuard)
-  @Put(':id')
-  @HttpCode(HttpStatus.OK)
-  async updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateRequest: UpdateUserRequest,
-    @Usr() user: AuthUser,
-  ): Promise<UserResponse> {
-    const userInfo = await this.usersService.updateUser(id, updateRequest);
-    return userInfo;
-  }
+  // @Put(':id')
+  // @HttpCode(HttpStatus.OK)
+  // async updateUser(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() updateRequest: UpdateUserRequest,
+  //   @Usr() user: AuthUser,
+  // ): Promise<UserResponse> {
+  //   const userInfo = await this.usersService.updateUser(id, updateRequest);
+  //   return userInfo;
+  // }
 }

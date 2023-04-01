@@ -1,6 +1,7 @@
 import {
   IsNotEmpty,
   IsOptional,
+  IsString,
   IsUrl,
   Matches,
   MaxLength,
@@ -28,16 +29,4 @@ export class UpdateUserRequest {
 
   @IsNotEmpty()
   username?: string;
-
-  // Reference with cloudinary: public_id
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  image_id?: string;
-
-  // Reference with cloudinary: secure_url
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  image_url?: string;
 }
