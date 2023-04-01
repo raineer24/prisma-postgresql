@@ -5,9 +5,17 @@ import { UsersModule } from './users/users.module';
 import { PrismaService } from './prisma.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [AuthModule, UsersModule, CloudinaryModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    AuthModule,
+    UsersModule,
+    CloudinaryModule,
+  ],
   providers: [PrismaService, CloudinaryService],
 })
 export class AppModule {}
