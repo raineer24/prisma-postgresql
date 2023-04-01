@@ -17,16 +17,26 @@ datasource db {
 // }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
-  username       String?   @unique
+  id             Int           @id @default(autoincrement())
+  email          String        @unique
+  username       String?       @unique
   firstName      String
   lastName       String
   hashedPassword String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt()
-  image          String?
-  role           String   @default("user")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  profileImage   ProfileImage?
+  role           String        @default("user")
 
   @@map("users")
+}
+
+model ProfileImage {
+  id         Int    @id @default(autoincrement())
+  public_id  String
+  secure_url String
+  userId     Int?   @unique
+  user       User?  @relation(fields: [userId], references: [id])
+
+  @@map("profile_image")
 }
