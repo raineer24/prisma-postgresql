@@ -2,10 +2,16 @@
   Warnings:
 
   - You are about to drop the column `image` on the `users` table. All the data in the column will be lost.
+  - The `role` column on the `users` table would be dropped and recreated. This will lead to data loss if there is data in the column.
 
 */
+-- CreateEnum
+CREATE TYPE "UserType" AS ENUM ('ADMIN', 'CHIEFEDITOR', 'EDITOR', 'USER');
+
 -- AlterTable
-ALTER TABLE "users" DROP COLUMN "image";
+ALTER TABLE "users" DROP COLUMN "image",
+DROP COLUMN "role",
+ADD COLUMN     "role" "UserType" NOT NULL DEFAULT E'USER';
 
 -- CreateTable
 CREATE TABLE "profile_image" (

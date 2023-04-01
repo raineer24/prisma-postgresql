@@ -72,8 +72,8 @@ export class UsersController {
     return updateRole;
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  //@Roles(UserRole.ADMIN)
+  //@UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
@@ -85,7 +85,7 @@ export class UsersController {
     return userId;
   }
 
-  @UseGuards(JwtAuthGuard, UserIsUserGuard)
+  //@UseGuards(JwtAuthGuard, UserIsUserGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(

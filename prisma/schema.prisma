@@ -26,7 +26,7 @@ model User {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt()
   profileImage   ProfileImage?
-  role           String        @default("user")
+  role           UserType      @default(USER)
 
   @@map("users")
 }
@@ -39,4 +39,11 @@ model ProfileImage {
   user       User?  @relation(fields: [userId], references: [id])
 
   @@map("profile_image")
+}
+
+enum UserType {
+  ADMIN
+  CHIEFEDITOR
+  EDITOR
+  USER
 }
