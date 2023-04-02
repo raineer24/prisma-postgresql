@@ -29,6 +29,7 @@ import { ApiConsumes } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserIsUserGuard } from '../auth/UserIsUser.guard';
+import { GetUserId } from 'src/core/decorators/user-id.decorator';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -41,7 +42,11 @@ export class UsersController {
   @Put('update-profile')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('image'))
-  async updatedProfile(): Promise<any> {
+  async updatedProfile(
+    @GetUserId() userId: number,
+    @Body() body: UpdateUserRequest,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<any> {
     return;
   }
 

@@ -1,4 +1,6 @@
+import { UserType } from '@prisma/client';
 import {
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -21,12 +23,25 @@ export class UpdateUserRequest {
   lastName?: string;
 
   @IsOptional()
+  @IsEnum(UserType)
+  role?: UserType;
+
+  @IsOptional()
   @IsUrl()
   image?: string;
 
-  @IsOptional()
-  role?: string;
-
   @IsNotEmpty()
   username?: string;
+
+  // Reference with cloudinary: public_id
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  image_id?: string;
+
+  // Reference with cloudinary: secure_url
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  image_url?: string;
 }

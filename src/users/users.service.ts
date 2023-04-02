@@ -16,6 +16,7 @@ import { UpdateUserRequest } from './models/request/update-user-request.model';
 import { Paginate } from './paginate/paginate';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { IImageUploadResponse } from '../features/interfaces/my-global-types.interface';
+import { UserType } from '@prisma/client';
 @Injectable()
 export class UsersService {
   constructor(
@@ -110,8 +111,8 @@ export class UsersService {
         email: true,
         firstName: true,
         lastName: true,
-        role: true,
         username: true,
+        role: true,
       },
     });
   }
