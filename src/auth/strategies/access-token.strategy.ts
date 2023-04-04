@@ -6,7 +6,7 @@ import { UserType } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 // import { Request } from 'express';
 
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { ITokenPayload, ITokenPayloadWithRole } from '../interfaces';
 
 import { ACCESS_TOKEN } from '../utils/keys.const';

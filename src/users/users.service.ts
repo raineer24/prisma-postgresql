@@ -8,7 +8,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthUser } from '../auth/auth-user';
 import { Usr } from './user.decorator';
 import { IUser, UserResponse } from './models/user.response';

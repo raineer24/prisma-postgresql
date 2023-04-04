@@ -5,7 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 import { AuthDto, UpdatedProfileDto } from '../dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';

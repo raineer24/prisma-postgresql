@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { UsersService } from '../users/users.service';
 import { map } from 'rxjs/operators';
-import { PrismaService } from './../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserResponse } from '../users/models/user.response';
 import { UserRole } from '../core/entities/user.entity';
 @Injectable()
