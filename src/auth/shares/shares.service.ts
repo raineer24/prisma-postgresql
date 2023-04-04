@@ -14,4 +14,20 @@ export class SharesService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
+
+  /*************************************************
+   *  Encoding data
+   */
+
+  /*************************************************
+   *  Compared data
+   */
+
+  /*************************************************
+   *  Generated a access_token and refresh_token
+   */
+
+  /*************************************************
+   *  Update new refresh token to user
+   */
 }
