@@ -14,7 +14,6 @@ import { MulterConfig } from 'src/features/configs/multer.config';
       envFilePath: ['.env'],
     }),
     AuthModule,
-    UsersModule,
     CloudinaryModule,
     MulterModule.register(MulterConfig),
   ],

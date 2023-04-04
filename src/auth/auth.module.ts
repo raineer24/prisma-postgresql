@@ -8,18 +8,21 @@ import { JwtStrategy } from './jwt.strategy';
 import config from '../config';
 import { UsersModule } from 'src/users/users.module';
 import { JwtAuthGuard } from './jwt.guard';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { AccessTokenStrategy } from './strategies/access-token.strategy';
+import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { SharesService } from './shares/shares.service';
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({
-      secret: config.jwt.secretOrKey,
-      signOptions: {
-        expiresIn: config.jwt.expiresIn,
-      },
-    }),
+    JwtModule.register({}),
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+    SharesService,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, PrismaService, JwtStrategy, JwtAuthGuard],
+  controllers: [AuthController, UserController],
+  providers: [AuthService, PrismaService, UserService],
   exports: [AuthService],
 })
 export class AuthModule {}

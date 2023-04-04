@@ -55,4 +55,24 @@ export class SharesService {
   /*************************************************
    *  Update new refresh token to user
    */
+  async updateRefreshToken(
+    userId: number,
+    refreshToken: string,
+  ): Promise<void> {
+    const hashToken = await this.hashData(refreshToken);
+
+    const user = await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        refresh_token: hashToken,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found(Update refresh_token)');
+    }
+    return;
+  }
 }
