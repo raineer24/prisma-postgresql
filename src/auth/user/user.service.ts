@@ -26,4 +26,8 @@ export class UserService {
     private readonly cloudinaryService: CloudinaryService,
     private readonly sharedService: SharesService,
   ) {}
+
+  /****************************
+   * Sign Up
+   */
 }
