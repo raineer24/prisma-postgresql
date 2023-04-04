@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
-import { AuthDto, UpdatedProfileDto } from '../dto';
+import { AuthDto, UpdatedProfileDto, CreateUserDto } from '../dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { SharesService } from '../shares/shares.service';
@@ -30,7 +30,11 @@ export class UserService {
   /****************************
    * Sign Up
    */
-  async signup() {
+  async signup(createUserDto: CreateUserDto) {
+    const user = await this.prismaService.user.findUnique({
+      where: { email: createUserDto.email },
+    });
+
     return;
   }
 
