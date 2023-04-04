@@ -30,4 +30,35 @@ export class UserService {
   /****************************
    * Sign Up
    */
+  async signup() {
+    return;
+  }
+
+  /****************************
+   * Sign In
+   */
+  async signin() {
+    return;
+  }
+
+  /****************************
+   * Get Profile
+   */
+  async getProfileById() {
+    return;
+  }
+
+  /****************************
+   * Sign Out
+   */
+  async logout() {
+    return;
+  }
+
+  /****************************
+   * Update Profile
+   */
+  async updateProfile() {
+    return;
+  }
 }
