@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ITokenPayloadWithRole } from '../../auth/interfaces/tokens.interface';
+import { ITokenPayloadWithRole } from '../interfaces/tokens.interface';
 
 export const GetUserId = createParamDecorator(
   (_: undefined, ctx: ExecutionContext): number => {

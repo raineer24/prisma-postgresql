@@ -18,6 +18,7 @@ import {
   IImageUploadResponse,
   IMessageResponse,
 } from '../../features/interfaces';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -30,13 +31,6 @@ export class UserService {
   /****************************
    * Sign Up
    */
-  async signup(createUserDto: CreateUserDto) {
-    const user = await this.prismaService.user.findUnique({
-      where: { email: createUserDto.email },
-    });
-
-    return;
-  }
 
   /****************************
    * Sign In

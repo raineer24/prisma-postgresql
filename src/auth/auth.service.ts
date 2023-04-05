@@ -17,9 +17,15 @@ import { AuthUser } from './auth-user';
 import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
 import { UserType } from '@prisma/client';
+import { SharesService } from './shares/shares.service';
+import { ITokenPayload } from './interfaces';
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private readonly sharedService: SharesService,
+  ) {}
 
   async signinLocal(signinDto: LoginRequest) {
     const userData = await this.prisma.user.findUnique({
@@ -85,7 +91,10 @@ export class AuthService {
     });
   }
 
-  async register(signupRequest: SignupRequest, res: Response) {
+  /****************************
+   * Sign Up
+   */
+  async register(signupRequest: SignupRequest) {
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
     });
@@ -105,10 +114,28 @@ export class AuthService {
       },
     });
 
+    const payload: ITokenPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    const { access_token, refresh_token } = await this.sharedService.getTokens(
+      user.id,
+      signupRequest.email,
+    );
+    await this.sharedService.updateRefreshToken(user.id, refresh_token);
+
     console.log('user', user);
     delete user.hashedPassword;
 
-    return res.send({ user });
+    //return res.send({ user });
+
+    return {
+      ...payload,
+      access_token,
+      refresh_token,
+    };
   }
 
   async validateUser(payload: JwtPayload): Promise<AuthUser> {
