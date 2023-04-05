@@ -34,8 +34,15 @@ export class AuthController {
     @Body() signupRequest: SignupRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { sub, email, role, access_token, refresh_token } =
-      await this.authService.register(signupRequest);
+    const {
+      email,
+      role,
+      access_token,
+      refresh_token,
+      username,
+      firstName,
+      lastName,
+    } = await this.authService.register(signupRequest);
 
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
@@ -45,17 +52,18 @@ export class AuthController {
 
     return {
       user: {
-        sub,
         email,
         role,
+        username,
       },
       access_token,
+      refresh_token,
     };
   }
 
   @Post('login')
-  signinLocal(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
-    return this.authService.signinLocal(signinDto);
+  signin(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
+    return this.authService.signin(signinDto);
   }
 
   // @Get('signout')

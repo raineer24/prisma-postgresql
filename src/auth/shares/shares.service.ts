@@ -47,6 +47,9 @@ export class SharesService {
       }),
     ]);
 
+    console.log('accestoken', access_token);
+    console.log('accestoken', refresh_token);
+
     return {
       access_token,
       refresh_token,
@@ -70,9 +73,10 @@ export class SharesService {
       },
     });
 
+    console.log('updaterefreshtoken', user);
+
     if (!user) {
       throw new BadRequestException('User not found(Update refresh_token)');
     }
-    return;
   }
 }

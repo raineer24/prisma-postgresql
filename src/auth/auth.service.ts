@@ -18,7 +18,7 @@ import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
 import { UserType } from '@prisma/client';
 import { SharesService } from './shares/shares.service';
-import { ITokenPayload } from './interfaces';
+import { ITokenPayload, ITokens } from './interfaces';
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,18 +27,13 @@ export class AuthService {
     private readonly sharedService: SharesService,
   ) {}
 
-  async signinLocal(signinDto: LoginRequest) {
+  /****************************
+   * Sign In
+   */
+  async signin(signinDto: LoginRequest): Promise<ITokenPayload & ITokens> {
     const userData = await this.prisma.user.findUnique({
       where: {
         email: signinDto.email,
-      },
-      select: {
-        id: true,
-        hashedPassword: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        username: true,
       },
     });
 
@@ -132,7 +127,7 @@ export class AuthService {
     //return res.send({ user });
 
     return {
-      ...payload,
+      ...user,
       access_token,
       refresh_token,
     };
