@@ -19,16 +19,18 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { UpdateUserRequest } from 'src/users/models/request/update-user-request.model';
-import { UserResponse } from 'src/users/models/user.response';
-import { Usr } from 'src/users/user.decorator';
+import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
+import { UserResponse } from '../../users/models/user.response';
+import { Usr } from '../../users/user.decorator';
 import { AuthUser } from '../auth-user';
-
+import { Roles } from '../../core/decorators/roles.decorator';
 import { GetRefreshToken, GetUserId } from '../decorators';
 import { AuthDto, UpdatedProfileDto } from '../dto';
 import { AccessTokenGuard, RefreshTokenGuard } from '../guards';
 import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
+import { UserType } from '@prisma/client';
+import { RoleGuard } from '../guards/roles.guard';
 
 @Controller('users')
 export class UserController {
@@ -72,8 +74,21 @@ export class UserController {
     );
   }
 
+  @Put(':id/role')
+  async updateRoleOfUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    const updateRole = await this.userService.updateRoleOfUser(
+      id,
+      updateRequest,
+    );
+
+    return updateRole;
+  }
+
   // @UseGuards(JwtAuthGuard, UserIsUserGuard)
-  // @Put(':id')
+  @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -84,8 +99,8 @@ export class UserController {
     return userInfo;
   }
 
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(UserType.ADMIN)
+  @UseGuards(AccessTokenGuard, RoleGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(

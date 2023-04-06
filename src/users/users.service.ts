@@ -78,29 +78,4 @@ export class UsersService {
   //     throw new ConflictException();
   //   }
   // }
-
-  // async updateUser(
-  //   userId: number,
-  //   updateRequest: UpdateUserRequest,
-  // ): Promise<UserResponse> {
-  //   try {
-  //     const updatedUser = await this.prisma.user.update({
-  //       where: { id: userId },
-  //       data: {
-  //         ...updateRequest,
-  //       },
-  //     });
-  //     return UserResponse.fromUserEntity(updatedUser);
-  //   } catch (err) {
-  //     Logger.error(JSON.stringify(err));
-  //     throw new ConflictException();
-  //   }
-  // }
-
-  public async getUserEntityById(id: number): Promise<UserResponse> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: id },
-    });
-    return UserResponse.fromUserEntity(user);
-  }
 }

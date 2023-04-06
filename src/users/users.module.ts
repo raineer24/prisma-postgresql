@@ -1,11 +1,11 @@
-// import { Module } from '@nestjs/common';
-// import { UsersService } from './users.service';
-// //import { UsersController } from './users.controller';
-// import { JwtStrategy } from '../auth/jwt.strategy';
-// import { PrismaService } from '../prisma.service';
-// import { Paginate } from './paginate/paginate';
-// @Module({
-//   controllers: [],
-//   providers: [UsersService, PrismaService, Paginate],
-// })
-// export class UsersModule {}
+import { Module } from '@nestjs/common';
+import { UsersService } from './users.service';
+//import { UsersController } from './users.controller';
+import { JwtStrategy } from '../auth/jwt.strategy';
+
+import { Paginate } from './paginate/paginate';
+@Module({
+  controllers: [],
+  providers: [UsersService, Paginate],
+})
+export class UsersModule {}

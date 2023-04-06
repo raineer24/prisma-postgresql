@@ -23,8 +23,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { Observable } from 'rxjs';
-import { UserResponse } from 'src/users/models/user.response';
-import { UpdateUserRequest } from 'src/users/models/request/update-user-request.model';
+import { UserResponse } from '../../users/models/user.response';
+import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
 
 @Injectable()
 export class UserService {
@@ -34,27 +34,6 @@ export class UserService {
     private readonly sharedService: SharesService,
     private paginate: Paginate,
   ) {}
-
-  /****************************
-   * Sign In
-   */
-  async signin() {
-    return;
-  }
-
-  /****************************
-   * Get Profile
-   */
-  async getProfileById() {
-    return;
-  }
-
-  /****************************
-   * Sign Out
-   */
-  async logout() {
-    return;
-  }
 
   /****************************
    * Upload profile photo
@@ -153,6 +132,25 @@ export class UserService {
         },
       });
       return UserResponse.fromUserEntity(updatedUser);
+    } catch (err) {
+      Logger.error(JSON.stringify(err));
+      throw new ConflictException();
+    }
+  }
+
+  async updateRoleOfUser(
+    userId: number,
+    updateRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    try {
+      const updatedRole = await this.prismaService.user.update({
+        data: { ...updateRequest },
+        where: {
+          id: userId,
+        },
+      });
+
+      return UserResponse.fromUserEntity(updatedRole);
     } catch (err) {
       Logger.error(JSON.stringify(err));
       throw new ConflictException();

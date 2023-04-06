@@ -30,6 +30,7 @@ export class UpdateUserRequest {
   @IsUrl()
   image?: string;
 
+  @IsOptional()
   @IsNotEmpty()
   username?: string;
 

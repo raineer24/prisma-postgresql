@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client';
+import type { User, UserType } from '@prisma/client';
 import { UserRole } from 'src/core/entities/user.entity';
 
 export class UserResponse {
@@ -18,7 +18,7 @@ export class UserResponse {
 
   updatedAt: Date; // ISO Date
 
-  role: string;
+  role?: UserType;
 
   static fromUserEntity(entity: User): UserResponse {
     const response = new UserResponse();

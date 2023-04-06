@@ -33,6 +33,7 @@ import { Paginate } from 'src/users/paginate/paginate';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     Paginate,
+    PrismaService,
   ],
 })
 export class AuthModule {}
