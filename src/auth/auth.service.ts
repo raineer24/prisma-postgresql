@@ -30,7 +30,7 @@ export class AuthService {
   /****************************
    * Sign In
    */
-  async signin(signinDto: LoginRequest): Promise<ITokenPayload & ITokens> {
+  async signin(signinDto: LoginRequest) {
     const userData = await this.prisma.user.findUnique({
       where: {
         email: signinDto.email,
@@ -51,14 +51,24 @@ export class AuthService {
       throw new ForbiddenException('Incorrect password');
     }
 
-    const tokens = await this.getTokens(userData.id, userData.email);
-    //await this.updateRtHash(userData.id, tokens.access_token);
+    const { access_token, refresh_token } = await this.sharedService.getTokens(
+      userData.id,
+      signinDto.email,
+    );
+
+    await this.sharedService.updateRefreshToken(userData.id, refresh_token);
+    const userPayload: ITokenPayload = {
+      sub: userData.id,
+      email: signinDto.email,
+      role: userData.role,
+    };
 
     delete userData.hashedPassword;
 
     return {
-      userData,
-      ...tokens,
+      ...userData,
+      access_token,
+      refresh_token,
     };
   }
 

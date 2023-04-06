@@ -62,8 +62,19 @@ export class AuthController {
   }
 
   @Post('login')
-  signin(@Body() signinDto: LoginRequest): Promise<AuthResponse> {
-    return this.authService.signin(signinDto);
+  async signin(
+    @Res({ passthrough: true }) res: Response,
+    @Body() signinDto: LoginRequest,
+  ) {
+    const resp = await this.authService.signin(signinDto);
+
+    // Set the secure cookie with httpOnly flag
+    res.cookie('refresh_token', resp.refresh_token, { httpOnly: true });
+    delete resp.refresh_token;
+
+    return {
+      ...resp,
+    };
   }
 
   // @Get('signout')
