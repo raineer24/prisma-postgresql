@@ -25,10 +25,10 @@ export class UserIsUserGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    console.log('request', typeof request.user.id);
+    console.log('request', request.user);
     console.log('request params', parseInt(request.params.id));
 
-    if (request.user.id === parseInt(request.params.id)) {
+    if (request.user.sub === parseInt(request.params.id)) {
       return true;
     }
   }

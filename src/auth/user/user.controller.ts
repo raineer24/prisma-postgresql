@@ -26,7 +26,11 @@ import { AuthUser } from '../auth-user';
 import { Roles } from '../../core/decorators/roles.decorator';
 import { GetRefreshToken, GetUserId } from '../decorators';
 import { AuthDto, UpdatedProfileDto } from '../dto';
-import { AccessTokenGuard, RefreshTokenGuard } from '../guards';
+import {
+  AccessTokenGuard,
+  RefreshTokenGuard,
+  UserIsUserGuard,
+} from '../guards';
 import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
 import { UserType } from '@prisma/client';
@@ -87,7 +91,7 @@ export class UserController {
     return updateRole;
   }
 
-  // @UseGuards(JwtAuthGuard, UserIsUserGuard)
+  @UseGuards(AccessTokenGuard, UserIsUserGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
