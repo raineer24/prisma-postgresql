@@ -16,6 +16,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfig } from '../features/configs/multer.config';
+import { Paginate } from 'src/users/paginate/paginate';
 @Module({
   imports: [
     PrismaModule,
@@ -31,6 +32,7 @@ import { MulterConfig } from '../features/configs/multer.config';
     SharesService,
     AccessTokenStrategy,
     RefreshTokenStrategy,
+    Paginate,
   ],
 })
 export class AuthModule {}

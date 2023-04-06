@@ -5,9 +5,10 @@ import {
   NotFoundException,
   UnauthorizedException,
   UploadedFile,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-
+import { Paginate } from '../../users/paginate/paginate';
 import { AuthDto, UpdatedProfileDto, CreateUserDto } from '../dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
@@ -22,6 +23,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { Observable } from 'rxjs';
+import { UserResponse } from 'src/users/models/user.response';
+import { UpdateUserRequest } from 'src/users/models/request/update-user-request.model';
 
 @Injectable()
 export class UserService {
@@ -29,6 +32,7 @@ export class UserService {
     private readonly prismaService: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly sharedService: SharesService,
+    private paginate: Paginate,
   ) {}
 
   /****************************
@@ -94,5 +98,64 @@ export class UserService {
     if (!newUser) throw new BadRequestException('User not found');
 
     return newUser;
+  }
+
+  async getUsers() {
+    return await this.prismaService.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        role: true,
+      },
+    });
+  }
+
+  async findAll(page: number, size: number, search: string) {
+    const { results, totalItems } = await this.paginate.pages(
+      page,
+      size,
+      search,
+    );
+    const totalPages = Math.ceil(totalItems / size) - 1;
+    const currentPage = Number(page);
+    return {
+      results,
+      pagination: {
+        length: totalItems,
+        size: size,
+        lastPage: totalPages,
+        page: currentPage,
+        startIndex: currentPage * size,
+        endIndex: currentPage * size + (size - 1),
+      },
+    };
+  }
+
+  public async getUserEntityById(id: number): Promise<UserResponse> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: id },
+    });
+    return UserResponse.fromUserEntity(user);
+  }
+
+  async updateUser(
+    userId: number,
+    updateRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    try {
+      const updatedUser = await this.prismaService.user.update({
+        where: { id: userId },
+        data: {
+          ...updateRequest,
+        },
+      });
+      return UserResponse.fromUserEntity(updatedUser);
+    } catch (err) {
+      Logger.error(JSON.stringify(err));
+      throw new ConflictException();
+    }
   }
 }
