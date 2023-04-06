@@ -35,12 +35,13 @@ import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
 import { UserType } from '@prisma/client';
 import { RoleGuard } from '../guards/roles.guard';
-
+import { PrismaService } from '../../prisma/prisma.service';
 @Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   /********************************

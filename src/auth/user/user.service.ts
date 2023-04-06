@@ -11,7 +11,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Paginate } from '../../users/paginate/paginate';
 import { AuthDto, UpdatedProfileDto, CreateUserDto } from '../dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 import { SharesService } from '../shares/shares.service';
 
 import * as fsExtra from 'fs-extra';
@@ -21,7 +21,7 @@ import {
   IMessageResponse,
 } from '../../features/interfaces';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import { Observable } from 'rxjs';
 import { UserResponse } from '../../users/models/user.response';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
@@ -88,6 +88,7 @@ export class UserService {
         lastName: true,
         username: true,
         role: true,
+        image_url: true,
       },
     });
   }

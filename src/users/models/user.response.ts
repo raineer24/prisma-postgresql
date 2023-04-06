@@ -20,6 +20,8 @@ export class UserResponse {
 
   role?: UserType;
 
+  image_id?: string;
+
   static fromUserEntity(entity: User): UserResponse {
     const response = new UserResponse();
     response.id = entity.id;
@@ -30,6 +32,7 @@ export class UserResponse {
     response.createdAt = entity.createdAt;
     response.lastName = entity.lastName;
     response.role = entity.role;
+    response.image_id = entity.image_id;
     return response;
   }
 }

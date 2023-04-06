@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary } from 'cloudinary';
+import { ImageTransformationOptions, v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class CloudinaryService {
@@ -10,5 +10,12 @@ export class CloudinaryService {
 
   async removeImage(publicId: string) {
     return await cloudinary.uploader.destroy(publicId);
+  }
+
+  getUrl(publicId: string, options?: ImageTransformationOptions) {
+    return cloudinary.url(publicId, {
+      secure: true,
+      ...options,
+    });
   }
 }
