@@ -24,10 +24,26 @@ import { AccessTokenGuard, RefreshTokenGuard } from '../guards';
 import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
 
-@Controller('auth/user')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
+
+  /********************************
+   * desc      Upload
+   * route     Post /api/auth/user/update-profile
+   * access    Private
+   */
+  @UseGuards(AccessTokenGuard)
+  @Post('upload')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('image'))
+  async setProfile(
+    @GetUserId() userId: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<any> {
+    return await this.userService.setProfile(file, userId);
+  }
 }
