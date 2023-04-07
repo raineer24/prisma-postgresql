@@ -104,8 +104,8 @@ export class UserController {
     return userInfo;
   }
 
-  @Roles(UserType.ADMIN)
-  @UseGuards(AccessTokenGuard, RoleGuard)
+  //@Roles(UserType.ADMIN)
+ // @UseGuards(AccessTokenGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
