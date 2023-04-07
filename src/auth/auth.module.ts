@@ -16,7 +16,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfig } from '../features/configs/multer.config';
-import { Paginate } from 'src/users/paginate/paginate';
+import { Paginate } from '../users/paginate/paginate';
 @Module({
   imports: [
     PrismaModule,

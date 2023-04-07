@@ -6,7 +6,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { ConfigModule } from '@nestjs/config';
-import { MulterConfig } from 'src/features/configs/multer.config';
+import { MulterConfig } from './features/configs/multer.config';
 import { PrismaModule } from './prisma/prisma.module';
 @Module({
   imports: [
