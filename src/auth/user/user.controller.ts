@@ -16,7 +16,6 @@ import {
   Request,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
@@ -40,7 +39,6 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
     private readonly prismaService: PrismaService,
   ) {}
 
@@ -105,7 +103,7 @@ export class UserController {
   }
 
   //@Roles(UserType.ADMIN)
- // @UseGuards(AccessTokenGuard)
+  // @UseGuards(AccessTokenGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
