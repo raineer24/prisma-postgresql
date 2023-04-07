@@ -1,5 +1,4 @@
-import type { User } from '@prisma/client';
-import { UserRole } from 'src/core/entities/user.entity';
+import type { User, UserType } from '@prisma/client';
 
 export class UserResponse {
   id: number;
@@ -10,7 +9,7 @@ export class UserResponse {
 
   lastName: string;
 
-  image: string | null;
+  // image: string | null;
 
   username: string;
 
@@ -18,7 +17,9 @@ export class UserResponse {
 
   updatedAt: Date; // ISO Date
 
-  role: string;
+  role?: UserType;
+
+  image_id?: string;
 
   static fromUserEntity(entity: User): UserResponse {
     const response = new UserResponse();
@@ -26,10 +27,23 @@ export class UserResponse {
 
     response.email = entity.email;
     response.username = entity.username;
-    response.image = entity.image;
+    // response.image = entity.image;
     response.createdAt = entity.createdAt;
     response.lastName = entity.lastName;
     response.role = entity.role;
+    response.image_id = entity.image_id;
     return response;
   }
+}
+
+export interface IUser {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  role: string;
+  image_id?: string;
+  image_url?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

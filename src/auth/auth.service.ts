@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { SignupRequest, LoginRequest } from './models/';
@@ -16,23 +16,24 @@ import { JwtPayload } from './jwt-payload';
 import { AuthUser } from './auth-user';
 import { UserRole } from '../core/entities/user.entity';
 import { Tokens } from './types/tokens.types';
+import { UserType } from '@prisma/client';
+import { SharesService } from './shares/shares.service';
+import { ITokenPayload, ITokens } from './interfaces';
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private readonly sharedService: SharesService,
+  ) {}
 
-  async signinLocal(signinDto: LoginRequest) {
+  /****************************
+   * Sign In
+   */
+  async signin(signinDto: LoginRequest) {
     const userData = await this.prisma.user.findUnique({
       where: {
         email: signinDto.email,
-      },
-      select: {
-        id: true,
-        hashedPassword: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        username: true,
-        image: true,
       },
     });
 
@@ -50,14 +51,24 @@ export class AuthService {
       throw new ForbiddenException('Incorrect password');
     }
 
-    const tokens = await this.getTokens(userData.id, userData.email);
-    //await this.updateRtHash(userData.id, tokens.access_token);
+    const { access_token, refresh_token } = await this.sharedService.getTokens(
+      userData.id,
+      signinDto.email,
+    );
+
+    await this.sharedService.updateRefreshToken(userData.id, refresh_token);
+    const userPayload: ITokenPayload = {
+      sub: userData.id,
+      email: signinDto.email,
+      role: userData.role,
+    };
 
     delete userData.hashedPassword;
 
     return {
-      userData,
-      ...tokens,
+      ...userData,
+      access_token,
+      refresh_token,
     };
   }
 
@@ -85,7 +96,10 @@ export class AuthService {
     });
   }
 
-  async register(signupRequest: SignupRequest, res: Response) {
+  /****************************
+   * Sign Up
+   */
+  async register(signupRequest: SignupRequest) {
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
     });
@@ -101,14 +115,32 @@ export class AuthService {
         firstName: signupRequest.firstName,
         lastName: signupRequest.lastName,
         username: signupRequest.username,
-        role: UserRole.USER,
+        role: UserType.USER,
       },
     });
+
+    const payload: ITokenPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    const { access_token, refresh_token } = await this.sharedService.getTokens(
+      user.id,
+      signupRequest.email,
+    );
+    await this.sharedService.updateRefreshToken(user.id, refresh_token);
 
     console.log('user', user);
     delete user.hashedPassword;
 
-    return res.send({ user });
+    //return res.send({ user });
+
+    return {
+      ...user,
+      access_token,
+      refresh_token,
+    };
   }
 
   async validateUser(payload: JwtPayload): Promise<AuthUser> {

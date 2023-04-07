@@ -1,38 +1,35 @@
 import { UserType } from '@prisma/client';
 import {
+  IsDateString,
+  IsEmail,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
   Matches,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 
-export class UpdateUserRequest {
+export class CreateUserDto {
   @IsOptional()
   @IsNotEmpty()
-  @Matches(RegExp('^[A-Za-zıöüçğşİÖÜÇĞŞñÑáéíóúÁÉÍÓÚ]+$'))
-  @MaxLength(20)
+  @IsString()
   firstName?: string;
 
   @IsOptional()
   @IsNotEmpty()
-  @Matches(RegExp('^[A-Za-zıöüçğşİÖÜÇĞŞñÑáéíóúÁÉÍÓÚ ]+$'))
-  @MaxLength(40)
+  @IsString()
   lastName?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsEmail()
+  email?: string;
 
   @IsOptional()
   @IsEnum(UserType)
   role?: UserType;
-
-  @IsOptional()
-  @IsUrl()
-  image?: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  username?: string;
 
   // Reference with cloudinary: public_id
   @IsOptional()

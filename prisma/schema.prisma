@@ -17,16 +17,26 @@ datasource db {
 // }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
-  username       String?   @unique
-  firstName      String
-  lastName       String
-  hashedPassword String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt()
-  image          String?
-  role           String   @default("user")
+  id                    Int       @id @default(autoincrement())
+  email                 String    @unique
+  username              String?   @unique
+  firstName             String
+  lastName              String
+  hashedPassword        String
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt()
+  image_id              String?
+  image_url             String?
+  refresh_token         String?
+  refresh_tooken_expire DateTime?
+  role                  UserType  @default(USER)
 
   @@map("users")
+}
+
+enum UserType {
+  ADMIN
+  CHIEFEDITOR
+  EDITOR
+  USER
 }
