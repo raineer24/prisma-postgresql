@@ -20,9 +20,6 @@ import {
   IImageUploadResponse,
   IMessageResponse,
 } from '../../features/interfaces';
-import { ConfigService } from '@nestjs/config';
-import { User, Prisma } from '@prisma/client';
-import { Observable } from 'rxjs';
 import { UserResponse } from '../../users/models/user.response';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
 
