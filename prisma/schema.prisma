@@ -30,8 +30,24 @@ model User {
   refresh_token         String?
   refresh_tooken_expire DateTime?
   role                  UserType  @default(USER)
+  Post                  Post[]
 
   @@map("users")
+}
+
+model Post {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt()
+  title         String
+  description   String
+  headerImage   String
+  isPublished   Boolean? @default(false)
+  slug          String
+  authorId      Int
+  author        User     @relation(fields: [authorId], references: [id])
+  publishedDate DateTime @default(now())
+  likes         Int      @default(0)
 }
 
 enum UserType {

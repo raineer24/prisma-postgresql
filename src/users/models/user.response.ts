@@ -32,6 +32,7 @@ export class UserResponse {
     response.lastName = entity.lastName;
     response.role = entity.role;
     response.image_id = entity.image_id;
+    response.firstName = entity.firstName;
     return response;
   }
 }
