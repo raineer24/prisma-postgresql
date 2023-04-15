@@ -17,7 +17,7 @@ datasource db {
 // }
 
 model User {
-  id                    Int       @id @default(autoincrement())
+  id                    String    @id @db.Uuid
   email                 String    @unique
   username              String?   @unique
   firstName             String
@@ -36,18 +36,19 @@ model User {
 }
 
 model Post {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt()
-  title         String
-  description   String
-  headerImage   String
-  isPublished   Boolean? @default(false)
-  slug          String
-  authorId      Int
-  author        User     @relation(fields: [authorId], references: [id])
-  publishedDate DateTime @default(now())
-  likes         Int      @default(0)
+  id          String   @id @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  content     String   @db.VarChar(512)
+  published   Boolean  @default(false)
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String   @db.Uuid
+  body        String
+  likes       Int
+  headerImage String
+  isPublished Boolean?
+  slug        String
 }
 
 enum UserType {
