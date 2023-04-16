@@ -29,12 +29,12 @@ export class UsersService {
    * Update Profile
    */
   async updatedProfile(
-    userId: number,
+    userId: string,
     body: UpdateUserRequest,
     file: Express.Multer.File,
   ): Promise<IUser> {
     const curUser = await this.prisma.user.findUnique({
-      where: { id: Number(userId) },
+      where: { id: userId },
     });
     return;
   }

@@ -6,9 +6,10 @@ export const GetUserId = createParamDecorator(
     const req = ctx.switchToHttp().getRequest();
     const user = req.user as ITokenPayloadWithRole;
     console.log('user', req);
+    const id = Number(user.sub);
 
     if (!user) return null;
 
-    return user.sub;
+    return id;
   },
 );

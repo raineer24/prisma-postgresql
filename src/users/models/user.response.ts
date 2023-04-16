@@ -1,7 +1,7 @@
 import type { User, UserType } from '@prisma/client';
 
 export class UserResponse {
-  id: number;
+  id: string;
 
   firstName: string;
 

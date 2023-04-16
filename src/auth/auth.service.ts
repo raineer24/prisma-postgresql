@@ -19,6 +19,7 @@ import { Tokens } from './types/tokens.types';
 import { UserType } from '@prisma/client';
 import { SharesService } from './shares/shares.service';
 import { ITokenPayload, ITokens } from './interfaces';
+import { v4 as uuid } from 'uuid';
 @Injectable()
 export class AuthService {
   constructor(
@@ -72,7 +73,7 @@ export class AuthService {
     };
   }
 
-  async getTokens(userId: number, email: string): Promise<Tokens> {
+  async getTokens(userId: string, email: string): Promise<Tokens> {
     const payload: JwtPayload = {
       id: userId,
       email: email,
@@ -84,7 +85,7 @@ export class AuthService {
     };
   }
 
-  async updateRtHash(userId: number, access_token: string): Promise<void> {
+  async updateRtHash(userId: string, access_token: string): Promise<void> {
     const hashedRt = await bcrypt.hash(access_token, 10);
     await this.prisma.user.update({
       where: {
@@ -100,6 +101,7 @@ export class AuthService {
    * Sign Up
    */
   async register(signupRequest: SignupRequest) {
+    const userId = uuid();
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
     });
@@ -110,6 +112,7 @@ export class AuthService {
     }
     const user = await this.prisma.user.create({
       data: {
+        id: userId,
         email: signupRequest.email.toLowerCase(),
         hashedPassword: await bcrypt.hash(signupRequest.password, 10),
         firstName: signupRequest.firstName,
