@@ -9,6 +9,7 @@ export class BlogService {
   constructor(private prisma: PrismaService) {}
 
   async createBlog(userId: string, dto: CreateBlogDto) {
+    console.log('userid', userId);
     const postId = uuid();
     const createdPost = await this.prisma.post.create({
       data: {
@@ -20,6 +21,7 @@ export class BlogService {
   }
 
   getBlogs(userId: string) {
+    console.log('userid',userId)
     return this.prisma.post.findMany({
       where: {
         authorId: userId,

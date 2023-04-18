@@ -8,6 +8,7 @@ import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { ConfigModule } from '@nestjs/config';
 import { MulterConfig } from './features/configs/multer.config';
 import { PrismaModule } from './prisma/prisma.module';
+import { BlogModule } from './blog/blog.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,6 +18,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     PrismaModule,
     CloudinaryModule,
+    BlogModule,
     MulterModule.register(MulterConfig),
   ],
   providers: [],
