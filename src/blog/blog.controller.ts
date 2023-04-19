@@ -28,4 +28,9 @@ export class BlogController {
     console.log('getl', userId);
     return this.blogService.getBlogs(userId);
   }
+
+  @Post()
+  createBlog(@GetUserId() userId: string, @Body() dto: CreateBlogDto) {
+    return this.blogService.createBlog(userId, dto);
+  }
 }
