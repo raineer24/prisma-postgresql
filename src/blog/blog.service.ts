@@ -5,10 +5,14 @@ import { v4 as uuid } from 'uuid';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBlogDto, EditBlogDto } from './dto';
 import { PostEntity } from './entities/post.entity';
+import { PostsRepository } from './repositories/post.repository';
 
 @Injectable()
 export class BlogService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly repository: PostsRepository,
+  ) {}
 
   async createBlog(userId: string, dto: CreateBlogDto): Promise<PostEntity> {
     console.log('userid', userId);
@@ -20,6 +24,7 @@ export class BlogService {
     //     authorId: userId,
     //   },
     // });
+    console.log('dto', dto);
 
     const data: Prisma.PostCreateInput = {
       ...dto,
@@ -44,5 +49,13 @@ export class BlogService {
         authorId: userId,
       },
     });
+  }
+
+  findAll() {
+    return this.repository.findAll();
+  }
+
+  findOne(id: string) {
+    return this.repository.findOne(id);
   }
 }

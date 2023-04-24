@@ -45,10 +45,10 @@ model Post {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String   @db.Uuid
   body        String
-  likes       Int
-  headerImage String
+  likes       Int?
+  headerImage String?
   isPublished Boolean?
-  slug        String
+  slug        String?
 }
 
 enum UserType {

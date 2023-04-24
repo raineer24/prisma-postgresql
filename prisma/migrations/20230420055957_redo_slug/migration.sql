@@ -33,10 +33,10 @@ CREATE TABLE "Post" (
     "published" BOOLEAN NOT NULL DEFAULT false,
     "authorId" UUID NOT NULL,
     "body" TEXT NOT NULL,
-    "likes" INTEGER NOT NULL,
-    "headerImage" TEXT NOT NULL,
+    "likes" INTEGER,
+    "headerImage" TEXT,
     "isPublished" BOOLEAN,
-    "slug" TEXT NOT NULL,
+    "slug" TEXT,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );

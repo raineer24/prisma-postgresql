@@ -9,7 +9,7 @@ import {
   Body,
   HttpStatus,
 } from '@nestjs/common';
-import { HttpCode } from '@nestjs/common/decorators';
+import { HttpCode, Query } from '@nestjs/common/decorators';
 import { GetRefreshToken, GetUserId } from '../auth/decorators';
 import {
   AccessTokenGuard,
@@ -19,18 +19,29 @@ import {
 import { BlogService } from './blog.service';
 import { CreateBlogDto, EditBlogDto } from './dto';
 
-@UseGuards(AccessTokenGuard)
 @Controller('blogs')
 export class BlogController {
   constructor(private blogService: BlogService) {}
-  @Get('')
-  getBlogs(@GetUserId() userId: string) {
-    console.log('getl', userId);
-    return this.blogService.getBlogs(userId);
-  }
+
+  // @UseGuards(AccessTokenGuard)
+  // @Get('')
+  // getBlogs(@GetUserId() userId: string) {
+  //   console.log('getl', userId);
+  //   return this.blogService.getBlogs(userId);
+  // }
 
   @Post()
   createBlog(@GetUserId() userId: string, @Body() dto: CreateBlogDto) {
+    console.log('dto service', dto);
     return this.blogService.createBlog(userId, dto);
+  }
+
+  @Get()
+  findBlogEntries(@Query('userId') userId: string) {
+    if (userId == null) {
+      return this.blogService.findAll();
+    } else {
+      return this.blogService.findOne(userId);
+    }
   }
 }
