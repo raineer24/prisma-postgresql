@@ -31,13 +31,13 @@ export class BlogController {
   // }
 
   @Post()
-  createBlog(@GetUserId() userId: string, @Body() dto: CreateBlogDto) {
+  createBlog(@GetUserId() userId: number, @Body() dto: CreateBlogDto) {
     console.log('dto service', dto);
     return this.blogService.createBlog(userId, dto);
   }
 
   @Get()
-  findBlogEntries(@Query('userId') userId: string) {
+  findBlogEntries(@Query('userId') userId: number) {
     if (userId == null) {
       return this.blogService.findAll();
     } else {

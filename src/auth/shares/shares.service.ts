@@ -30,7 +30,7 @@ export class SharesService {
   /*************************************************
    *  Generated a access_token and refresh_token
    */
-  async getTokens(userId: string, email: string): Promise<ITokens> {
+  async getTokens(userId: number, email: string): Promise<ITokens> {
     const payload: ITokenPayload = {
       sub: userId,
       email,
@@ -59,7 +59,7 @@ export class SharesService {
    *  Update new refresh token to user
    */
   async updateRefreshToken(
-    userId: string,
+    userId: number,
     refreshToken: string,
   ): Promise<void> {
     const hashToken = await this.hashData(refreshToken);

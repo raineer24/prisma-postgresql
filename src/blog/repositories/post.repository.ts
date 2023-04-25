@@ -23,7 +23,7 @@ export class PostsRepository {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     return this.prisma.post.findUnique({
       where: {
         id,

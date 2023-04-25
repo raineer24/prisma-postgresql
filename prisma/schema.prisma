@@ -17,7 +17,7 @@ datasource db {
 // }
 
 model User {
-  id                    String    @id @db.Uuid
+  id                    Int       @id @default(autoincrement())
   email                 String    @unique
   username              String?   @unique
   firstName             String
@@ -36,14 +36,14 @@ model User {
 }
 
 model Post {
-  id          String   @id @db.Uuid
+  id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String
   content     String   @db.VarChar(512)
   published   Boolean  @default(false)
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    String   @db.Uuid
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    Int?
   body        String
   likes       Int?
   headerImage String?

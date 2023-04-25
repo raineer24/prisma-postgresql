@@ -1,7 +1,7 @@
 import { UserType } from '@prisma/client';
 
 export interface ITokenPayload {
-  sub: string;
+  sub: number;
   email: string;
   role?: string;
 }

@@ -35,7 +35,7 @@ export class UserService {
   /****************************
    * Upload profile photo
    */
-  async setProfile(file: Express.Multer.File, userId: string) {
+  async setProfile(file: Express.Multer.File, userId: number) {
     let uploadedResult: IImageUploadResponse;
     const curUser = await this.prismaService.user.findUnique({
       where: { id: userId },
@@ -111,7 +111,7 @@ export class UserService {
     };
   }
 
-  public async getUserEntityById(id: string): Promise<UserResponse> {
+  public async getUserEntityById(id: number): Promise<UserResponse> {
     const user = await this.prismaService.user.findUnique({
       where: { id: id },
     });
@@ -119,7 +119,7 @@ export class UserService {
   }
 
   async updateUser(
-    userId: string,
+    userId: number,
     updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     try {
@@ -137,7 +137,7 @@ export class UserService {
   }
 
   async updateRoleOfUser(
-    userId: string,
+    userId: number,
     updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     try {

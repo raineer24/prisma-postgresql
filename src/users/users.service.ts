@@ -29,7 +29,7 @@ export class UsersService {
    * Update Profile
    */
   async updatedProfile(
-    userId: string,
+    userId: number,
     body: UpdateUserRequest,
     file: Express.Multer.File,
   ): Promise<IUser> {

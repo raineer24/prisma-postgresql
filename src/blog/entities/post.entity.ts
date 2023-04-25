@@ -1,13 +1,13 @@
 import { Post } from '@prisma/client';
 
 export class PostEntity implements Post {
-  authorId: string;
+  authorId: number;
   body: string;
   likes: number | null;
   headerImage: string | null;
   isPublished: boolean;
   slug: string | null;
-  id: string;
+  id: number;
   published: boolean;
   title: string;
   content: string;

@@ -14,9 +14,9 @@ export class BlogService {
     private readonly repository: PostsRepository,
   ) {}
 
-  async createBlog(userId: string, dto: CreateBlogDto): Promise<PostEntity> {
+  async createBlog(userId: number, dto: CreateBlogDto): Promise<PostEntity> {
     console.log('userid', userId);
-    const postId = uuid();
+    //  const postId = uuid();
     // const createdPost = await this.prisma.post.create({
     //   data: {
     //     ...dto,
@@ -28,7 +28,6 @@ export class BlogService {
 
     const data: Prisma.PostCreateInput = {
       ...dto,
-      id: postId,
       author: {
         connect: {
           id: userId,
@@ -42,7 +41,7 @@ export class BlogService {
     });
   }
 
-  getBlogs(userId: string) {
+  getBlogs(userId: number) {
     console.log('userid', userId);
     return this.prisma.post.findMany({
       where: {
@@ -55,7 +54,7 @@ export class BlogService {
     return this.repository.findAll();
   }
 
-  findOne(id: string) {
+  findOne(id: number) {
     return this.repository.findOne(id);
   }
 }

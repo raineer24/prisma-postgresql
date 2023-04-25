@@ -50,7 +50,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('image'))
   async setProfile(
-    @GetUserId() userId: string,
+    @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
     return await this.userService.setProfile(file, userId);
@@ -77,7 +77,7 @@ export class UserController {
 
   @Put(':id/role')
   async updateRoleOfUser(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     const updateRole = await this.userService.updateRoleOfUser(
@@ -92,7 +92,7 @@ export class UserController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateRequest: UpdateUserRequest,
     @Usr() user: AuthUser,
   ): Promise<UserResponse> {
@@ -105,7 +105,7 @@ export class UserController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Usr() user: AuthUser,
   ): Promise<UserResponse> {
     console.log('user 1', user);

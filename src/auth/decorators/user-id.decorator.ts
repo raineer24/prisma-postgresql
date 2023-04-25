@@ -7,8 +7,8 @@ export const GetUserId = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
     const user = req.user as ITokenPayloadWithRole;
     console.log('user', user);
-    const id = typeof parseFloat(user.sub);
-    console.log('ud', id);
+    // const id = typeof parseFloat(user.sub);
+    // console.log('ud', id);
 
     if (!user) return null;
 
