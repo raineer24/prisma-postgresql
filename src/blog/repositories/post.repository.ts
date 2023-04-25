@@ -11,6 +11,7 @@ export class PostsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(): Promise<PostEntity[]> {
+    console.log('findALL');
     return this.prisma.post.findMany({
       include: {
         author: {
@@ -24,6 +25,7 @@ export class PostsRepository {
   }
 
   async findOne(id: number) {
+    console.log('finDOne');
     return this.prisma.post.findUnique({
       where: {
         id,

@@ -8,6 +8,7 @@ import {
   Param,
   Body,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { HttpCode, Query } from '@nestjs/common/decorators';
 import { GetRefreshToken, GetUserId } from '../auth/decorators';
@@ -30,14 +31,17 @@ export class BlogController {
   //   return this.blogService.getBlogs(userId);
   // }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   createBlog(@GetUserId() userId: number, @Body() dto: CreateBlogDto) {
+    console.log('userid', userId);
     console.log('dto service', dto);
     return this.blogService.createBlog(userId, dto);
   }
 
   @Get()
-  findBlogEntries(@Query('userId') userId: number) {
+  findBlogEntries(@Query('userId', ParseIntPipe) userId: number) {
+    console.log('userid', typeof userId);
     if (userId == null) {
       return this.blogService.findAll();
     } else {
