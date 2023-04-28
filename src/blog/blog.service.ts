@@ -35,13 +35,13 @@ export class BlogService {
       },
     };
     console.log('data', data);
-
+    delete data['hashedPassword'];
     return this.prisma.post.create({
       data, //mesma coisa que data: data
     });
   }
 
-  getBlogs(userId: number) {
+  getBlogbyId(userId: number) {
     console.log('userid', userId);
     return this.prisma.post.findMany({
       where: {

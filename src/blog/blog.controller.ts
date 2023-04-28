@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { HttpCode, Query } from '@nestjs/common/decorators';
+import { Observable } from 'rxjs';
 import { GetRefreshToken, GetUserId } from '../auth/decorators';
 import {
   AccessTokenGuard,
@@ -19,6 +20,7 @@ import {
 } from '../auth/guards';
 import { BlogService } from './blog.service';
 import { CreateBlogDto, EditBlogDto } from './dto';
+import { PostEntity } from './entities/post.entity';
 
 @Controller('blogs')
 export class BlogController {
@@ -41,11 +43,12 @@ export class BlogController {
 
   @Get()
   findBlogEntries(@Query('userId', ParseIntPipe) userId: number) {
-    console.log('userid', typeof userId);
+    console.log('userid', userId);
     if (userId == null) {
+      console.log('null');
       return this.blogService.findAll();
     } else {
-      return this.blogService.findOne(userId);
+      return this.blogService.getBlogbyId(userId);
     }
   }
 }

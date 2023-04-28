@@ -86,6 +86,14 @@ export class UserService {
         username: true,
         role: true,
         image_url: true,
+        Post: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            authorId: true,
+          },
+        },
       },
     });
   }
