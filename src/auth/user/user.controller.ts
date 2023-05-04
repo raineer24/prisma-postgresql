@@ -105,7 +105,7 @@ export class UserController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getUserEntityById(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Usr() user: AuthUser,
   ): Promise<UserResponse> {
     console.log('user 1', user);

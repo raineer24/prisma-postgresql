@@ -6,7 +6,12 @@ import {
   UnauthorizedException,
   UploadedFile,
   Logger,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
+
+import { PostI } from '../../blog/models/post';
+import { User } from '../models/user';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Paginate } from '../../users/paginate/paginate';
 import { AuthDto, UpdatedProfileDto, CreateUserDto } from '../dto';
@@ -31,6 +36,13 @@ export class UserService {
     private readonly sharedService: SharesService,
     private paginate: Paginate,
   ) {}
+
+  public errorMessage() {
+    return new HttpException(
+      'There is a problem. Please try to login again later.',
+      HttpStatus.NOT_FOUND,
+    );
+  }
 
   /****************************
    * Upload profile photo
@@ -119,11 +131,27 @@ export class UserService {
     };
   }
 
+  public async getUser(id: string): Promise<User | HttpException> {
+    const user: User = await this.prisma.user.findUnique({
+      where: { id },
+      include: { personalInformation: true, userHistories: true },
+    });
+    if (user) {
+      return user;
+    } else {
+      throw this.errorMessage();
+    }
+  }
+
   public async getUserEntityById(id: number): Promise<UserResponse> {
     const user = await this.prismaService.user.findUnique({
       where: { id: id },
+      include: {
+        Post: true,
+      },
     });
-    return UserResponse.fromUserEntity(user);
+    console.log('user', user);
+    //return UserResponse.fromUserEntity(user);
   }
 
   async updateUser(
