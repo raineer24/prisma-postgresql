@@ -131,10 +131,10 @@ export class UserService {
     };
   }
 
-  public async getUser(id: string): Promise<User | HttpException> {
-    const user: User = await this.prisma.user.findUnique({
+  public async getUser(id: number): Promise<User | HttpException> {
+    const user: User = await this.prismaService.user.findUnique({
       where: { id },
-      include: { personalInformation: true, userHistories: true },
+      include: { Post: true },
     });
     if (user) {
       return user;
@@ -143,16 +143,16 @@ export class UserService {
     }
   }
 
-  public async getUserEntityById(id: number): Promise<UserResponse> {
-    const user = await this.prismaService.user.findUnique({
-      where: { id: id },
-      include: {
-        Post: true,
-      },
-    });
-    console.log('user', user);
-    //return UserResponse.fromUserEntity(user);
-  }
+  // public async getUserEntityById(id: number): Promise<UserResponse> {
+  //   const user = await this.prismaService.user.findUnique({
+  //     where: { id: id },
+  //     include: {
+  //       Post: true,
+  //     },
+  //   });
+  //   console.log('user', user);
+  //   //return UserResponse.fromUserEntity(user);
+  // }
 
   async updateUser(
     userId: number,

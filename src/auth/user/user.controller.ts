@@ -15,7 +15,9 @@ import {
   UseInterceptors,
   Request,
   ParseIntPipe,
+  HttpException,
 } from '@nestjs/common';
+import { User } from '../models/user';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
@@ -102,14 +104,22 @@ export class UserController {
 
   //@Roles(UserType.ADMIN)
   // @UseGuards(AccessTokenGuard)
+  // @Get(':id')
+  // @HttpCode(HttpStatus.OK)
+  // async getUserEntityById(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Usr() user: AuthUser,
+  // ): Promise<UserResponse> {
+  //   console.log('user 1', user);
+  //   const userId = await this.userService.getUserEntityById(id);
+  //   return userId;
+  // }
+
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async getUserEntityById(
-    @Param('id', ParseIntPipe) id: number,
-    @Usr() user: AuthUser,
-  ): Promise<UserResponse> {
-    console.log('user 1', user);
-    const userId = await this.userService.getUserEntityById(id);
-    return userId;
+  @UseGuards(AccessTokenGuard)
+  getUser(
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<User | HttpException> {
+    return this.userService.getUser(userId);
   }
 }

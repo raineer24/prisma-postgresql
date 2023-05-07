@@ -41,10 +41,6 @@ export class User {
   @IsString()
   lastName?: string;
 
-  @IsNotEmpty()
-  @IsString()
-  password: string;
-
   @IsOptional()
   @IsString()
   token?: string;
