@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions/forbidden.exception';
 import { Prisma } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBlogDto, EditBlogDto } from './dto';
 import { PostEntity } from './entities/post.entity';
+import { PostI } from './models/post';
 import { PostsRepository } from './repositories/post.repository';
 
 @Injectable()
@@ -56,5 +57,14 @@ export class BlogService {
 
   findOne(id: number) {
     return this.repository.findOne(id);
+  }
+
+  public async getPost(postId: number): Promise<PostI | HttpException> {
+    return await this.prisma.post.findUnique({
+      where: { id: postId },
+      include: {
+        user: true,
+      },
+    });
   }
 }
