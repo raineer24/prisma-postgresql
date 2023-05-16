@@ -51,4 +51,18 @@ export class BlogController {
       return this.blogService.getBlogbyId(userId);
     }
   }
+
+  @Get('post/:postId')
+  @UseGuards(AccessTokenGuard)
+  getPost(
+    @Param('postId', ParseIntPipe) postId: string,
+  ): Promise<PostI | HttpException> {
+    if (!postId) {
+      throw new HttpException(
+        'There is a problem. Please try again later what you want to do..',
+        HttpStatus.NOT_IMPLEMENTED,
+      );
+    }
+    return this.blogService.getPost(postId);
+  }
 }

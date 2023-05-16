@@ -59,11 +59,11 @@ export class BlogService {
     return this.repository.findOne(id);
   }
 
-  public async getPost(postId: number): Promise<PostI | HttpException> {
-    return await this.prisma.post.findUnique({
+  getPost(postId: number): Promise<PostI | HttpException> {
+    return this.prisma.post.findUnique({
       where: { id: postId },
       include: {
-        user: true,
+        author: true,
       },
     });
   }

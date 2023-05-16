@@ -8,6 +8,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+import { User } from 'src/auth/models/user';
 
 export class PostI {
   id?: number;
@@ -19,4 +20,9 @@ export class PostI {
   @IsString()
   @MaxLength(300)
   content: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => User)
+  user?: User;
 }
