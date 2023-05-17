@@ -9,6 +9,7 @@ import {
   Body,
   HttpStatus,
   ParseIntPipe,
+  HttpException,
 } from '@nestjs/common';
 import { HttpCode, Query } from '@nestjs/common/decorators';
 import { Observable } from 'rxjs';
@@ -21,6 +22,7 @@ import {
 import { BlogService } from './blog.service';
 import { CreateBlogDto, EditBlogDto } from './dto';
 import { PostEntity } from './entities/post.entity';
+import { PostI } from './models/post';
 
 @Controller('blogs')
 export class BlogController {
@@ -55,7 +57,7 @@ export class BlogController {
   @Get('post/:postId')
   @UseGuards(AccessTokenGuard)
   getPost(
-    @Param('postId', ParseIntPipe) postId: string,
+    @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostI | HttpException> {
     if (!postId) {
       throw new HttpException(
