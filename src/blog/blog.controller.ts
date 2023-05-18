@@ -54,7 +54,7 @@ export class BlogController {
     }
   }
 
-  @Get('post/:postId')
+  @Get(':postId')
   @UseGuards(AccessTokenGuard)
   getPost(
     @Param('postId', ParseIntPipe) postId: number,
