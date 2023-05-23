@@ -17,14 +17,6 @@ export class BlogService {
 
   async createBlog(userId: number, dto: CreateBlogDto): Promise<PostEntity> {
     console.log('userid', userId);
-    //  const postId = uuid();
-    // const createdPost = await this.prisma.post.create({
-    //   data: {
-    //     ...dto,
-    //     id: postId,
-    //     authorId: userId,
-    //   },
-    // });
     console.log('dto', dto);
 
     const data: Prisma.PostCreateInput = {
@@ -41,6 +33,8 @@ export class BlogService {
       data, //mesma coisa que data: data
     });
   }
+
+  async editBlogById() {}
 
   getBlogbyId(userId: number) {
     console.log('userid', userId);
