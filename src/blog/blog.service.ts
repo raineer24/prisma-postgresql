@@ -34,7 +34,14 @@ export class BlogService {
     });
   }
 
-  async editBlogById() {}
+  async editBlogById(dto: EditBlogDto, blogId: number) {
+    const blog = await this.prisma.post.findUnique({
+      where: {
+        id: blogId,
+      },
+    });
+    return;
+  }
 
   getBlogbyId(userId: number) {
     console.log('userid', userId);
