@@ -35,6 +35,16 @@ export class BlogController {
   //   return this.blogService.getBlogs(userId);
   // }
 
+  @Patch(':id')
+  @UseGuards(AccessTokenGuard, UserIsUserGuard)
+  editBlogById(
+    @GetUserId() userId: number,
+    @Body() dto: EditBlogDto,
+    @Param('id', ParseIntPipe) blogId: number,
+  ) {
+    return this.blogService.editBlogById(userId, dto, blogId);
+  }
+
   @UseGuards(AccessTokenGuard)
   @Post()
   createBlog(@GetUserId() userId: number, @Body() dto: CreateBlogDto) {

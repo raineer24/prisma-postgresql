@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AuthModule } from 'src/auth/auth.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { BlogController } from './blog.controller';
@@ -9,5 +10,6 @@ import { PostsRepository } from './repositories/post.repository';
   controllers: [BlogController],
   providers: [BlogService, PrismaService, PostsRepository],
   exports: [BlogService],
+  imports: [AuthModule],
 })
 export class BlogModule {}

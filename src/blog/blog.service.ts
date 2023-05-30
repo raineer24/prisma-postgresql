@@ -34,13 +34,23 @@ export class BlogService {
     });
   }
 
-  async editBlogById(dto: EditBlogDto, blogId: number) {
+  async editBlogById(userId: number, dto: EditBlogDto, blogId: number) {
     const blog = await this.prisma.post.findUnique({
       where: {
         id: blogId,
       },
     });
-    return;
+    if (!blog || blog.authorId !== userId) {
+      throw new ForbiddenException('Access to resource denied');
+    }
+    return this.prisma.post.update({
+      where: {
+        id: blogId,
+      },
+      data: {
+        ...dto,
+      },
+    });
   }
 
   getBlogbyId(userId: number) {
