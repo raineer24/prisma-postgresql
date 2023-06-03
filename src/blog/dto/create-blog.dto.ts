@@ -9,6 +9,7 @@ export class CreateBlogDto {
   // @IsString()
   // authorId: string;
 
+  @IsOptional()
   @IsString()
   body: string;
 

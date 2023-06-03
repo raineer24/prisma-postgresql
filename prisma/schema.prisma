@@ -44,7 +44,6 @@ model Post {
   published   Boolean  @default(false)
   author      User?    @relation(fields: [authorId], references: [id])
   authorId    Int?
-  body        String
   likes       Int?
   headerImage String?
   isPublished Boolean?
