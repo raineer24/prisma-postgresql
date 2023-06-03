@@ -78,4 +78,20 @@ export class BlogService {
       },
     });
   }
+
+  async deleteBlog(userId: number, blogId: number) {
+    const blog = await this.prisma.post.findUnique({
+      where: {
+        id: blogId,
+      },
+    });
+    if (!blog || blog.authorId !== userId) {
+      throw new ForbiddenException('Access to resource denied');
+    }
+    await this.prisma.post.delete({
+      where: {
+        id: blogId,
+      },
+    });
+  }
 }
