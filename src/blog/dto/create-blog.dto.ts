@@ -9,9 +9,9 @@ export class CreateBlogDto {
   // @IsString()
   // authorId: string;
 
-  @IsOptional()
-  @IsString()
-  body: string;
+  // @IsOptional()
+  // @IsString()
+  // body: string;
 
   @IsOptional()
   likes: number;

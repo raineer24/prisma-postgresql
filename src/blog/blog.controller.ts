@@ -79,8 +79,11 @@ export class BlogController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  deleteBlog(@GetUserId() userId: number, @Param('id') blogId: number) {
+  @UseGuards(AccessTokenGuard)
+  deleteBlog(
+    @GetUserId() userId: number,
+    @Param('id', ParseIntPipe) blogId: number,
+  ) {
     return this.blogService.deleteBlog(userId, blogId);
   }
 }

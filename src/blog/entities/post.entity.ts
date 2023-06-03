@@ -2,7 +2,6 @@ import { Post } from '@prisma/client';
 
 export class PostEntity implements Post {
   authorId: number;
-  body: string;
   likes: number | null;
   headerImage: string | null;
   isPublished: boolean;

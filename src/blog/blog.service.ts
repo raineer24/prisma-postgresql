@@ -80,11 +80,13 @@ export class BlogService {
   }
 
   async deleteBlog(userId: number, blogId: number) {
+    console.log('userId!', userId);
     const blog = await this.prisma.post.findUnique({
       where: {
         id: blogId,
       },
     });
+    console.log('blogId', blog.authorId);
     if (!blog || blog.authorId !== userId) {
       throw new ForbiddenException('Access to resource denied');
     }
