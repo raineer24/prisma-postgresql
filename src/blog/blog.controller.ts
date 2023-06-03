@@ -77,4 +77,10 @@ export class BlogController {
     }
     return this.blogService.getPost(postId);
   }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteBlog(@GetUserId() userId: number, @Param('id') blogId: number) {
+    return this.blogService.deleteBlog(userId, blogId);
+  }
 }
