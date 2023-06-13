@@ -34,7 +34,7 @@ export class UsersService {
     file: Express.Multer.File,
   ): Promise<IUser> {
     const curUser = await this.prisma.user.findUnique({
-      where: { id: Number(userId) },
+      where: { id: userId },
     });
     return;
   }

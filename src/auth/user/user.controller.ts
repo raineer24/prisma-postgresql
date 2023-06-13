@@ -15,7 +15,9 @@ import {
   UseInterceptors,
   Request,
   ParseIntPipe,
+  HttpException,
 } from '@nestjs/common';
+import { User } from '../models/user';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
@@ -32,8 +34,6 @@ import {
 } from '../guards';
 import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
-import { UserType } from '@prisma/client';
-import { RoleGuard } from '../guards/roles.guard';
 import { PrismaService } from '../../prisma/prisma.service';
 @Controller('users')
 export class UserController {
@@ -79,7 +79,7 @@ export class UserController {
 
   @Put(':id/role')
   async updateRoleOfUser(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: number,
     @Body() updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     const updateRole = await this.userService.updateRoleOfUser(
@@ -94,7 +94,7 @@ export class UserController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: number,
     @Body() updateRequest: UpdateUserRequest,
     @Usr() user: AuthUser,
   ): Promise<UserResponse> {
@@ -104,14 +104,22 @@ export class UserController {
 
   //@Roles(UserType.ADMIN)
   // @UseGuards(AccessTokenGuard)
+  // @Get(':id')
+  // @HttpCode(HttpStatus.OK)
+  // async getUserEntityById(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Usr() user: AuthUser,
+  // ): Promise<UserResponse> {
+  //   console.log('user 1', user);
+  //   const userId = await this.userService.getUserEntityById(id);
+  //   return userId;
+  // }
+
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async getUserEntityById(
-    @Param('id', ParseIntPipe) id: number,
-    @Usr() user: AuthUser,
-  ): Promise<UserResponse> {
-    console.log('user 1', user);
-    const userId = await this.userService.getUserEntityById(id);
-    return userId;
+  @UseGuards(AccessTokenGuard)
+  getUser(
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<User | HttpException> {
+    return this.userService.getUser(userId);
   }
 }

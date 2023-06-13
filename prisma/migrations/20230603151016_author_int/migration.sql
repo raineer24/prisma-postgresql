@@ -16,3 +16,23 @@ ADD COLUMN     "refresh_token" TEXT,
 ADD COLUMN     "refresh_tooken_expire" TIMESTAMP(3),
 DROP COLUMN "role",
 ADD COLUMN     "role" "UserType" NOT NULL DEFAULT E'USER';
+
+-- CreateTable
+CREATE TABLE "Post" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" VARCHAR(512) NOT NULL,
+    "published" BOOLEAN NOT NULL DEFAULT false,
+    "authorId" INTEGER,
+    "likes" INTEGER,
+    "headerImage" TEXT,
+    "isPublished" BOOLEAN,
+    "slug" TEXT,
+
+    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

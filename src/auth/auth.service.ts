@@ -19,6 +19,7 @@ import { Tokens } from './types/tokens.types';
 import { UserType } from '@prisma/client';
 import { SharesService } from './shares/shares.service';
 import { ITokenPayload, ITokens } from './interfaces';
+import { v4 as uuid } from 'uuid';
 @Injectable()
 export class AuthService {
   constructor(
@@ -100,6 +101,7 @@ export class AuthService {
    * Sign Up
    */
   async register(signupRequest: SignupRequest) {
+    //  const userId = uuid();
     const foundUser = await this.prisma.user.findUnique({
       where: { email: signupRequest.email },
     });
@@ -110,6 +112,7 @@ export class AuthService {
     }
     const user = await this.prisma.user.create({
       data: {
+        //id: userId,
         email: signupRequest.email.toLowerCase(),
         hashedPassword: await bcrypt.hash(signupRequest.password, 10),
         firstName: signupRequest.firstName,

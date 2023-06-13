@@ -6,9 +6,13 @@ import {
   Matches,
   MaxLength,
   MinLength,
+  isString,
 } from 'class-validator';
 
 export class SignupRequest {
+
+  id: string;
+  
   @IsNotEmpty()
   @IsEmail()
   email: string;

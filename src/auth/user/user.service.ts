@@ -6,7 +6,12 @@ import {
   UnauthorizedException,
   UploadedFile,
   Logger,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
+
+import { PostI } from '../../blog/models/post';
+import { User } from '../models/user';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Paginate } from '../../users/paginate/paginate';
 import { AuthDto, UpdatedProfileDto, CreateUserDto } from '../dto';
@@ -32,13 +37,20 @@ export class UserService {
     private paginate: Paginate,
   ) {}
 
+  public errorMessage() {
+    return new HttpException(
+      'There is a problem. Please try to login again later.',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
   /****************************
    * Upload profile photo
    */
   async setProfile(file: Express.Multer.File, userId: number) {
     let uploadedResult: IImageUploadResponse;
     const curUser = await this.prismaService.user.findUnique({
-      where: { id: Number(userId) },
+      where: { id: userId },
     });
 
     if (!curUser) {
@@ -86,6 +98,14 @@ export class UserService {
         username: true,
         role: true,
         image_url: true,
+        Post: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            authorId: true,
+          },
+        },
       },
     });
   }
@@ -111,12 +131,28 @@ export class UserService {
     };
   }
 
-  public async getUserEntityById(id: number): Promise<UserResponse> {
-    const user = await this.prismaService.user.findUnique({
-      where: { id: id },
+  public async getUser(id: number): Promise<User | HttpException> {
+    const user: User = await this.prismaService.user.findUnique({
+      where: { id },
+      include: { Post: true },
     });
-    return UserResponse.fromUserEntity(user);
+    if (user) {
+      return user;
+    } else {
+      throw this.errorMessage();
+    }
   }
+
+  // public async getUserEntityById(id: number): Promise<UserResponse> {
+  //   const user = await this.prismaService.user.findUnique({
+  //     where: { id: id },
+  //     include: {
+  //       Post: true,
+  //     },
+  //   });
+  //   console.log('user', user);
+  //   //return UserResponse.fromUserEntity(user);
+  // }
 
   async updateUser(
     userId: number,

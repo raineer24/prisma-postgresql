@@ -35,5 +35,6 @@ import { Paginate } from '../users/paginate/paginate';
     Paginate,
     PrismaService,
   ],
+  exports: [UserService],
 })
 export class AuthModule {}
