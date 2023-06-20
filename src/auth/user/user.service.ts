@@ -47,6 +47,30 @@ export class UserService {
   /****************************
    * Upload profile photo
    */
+  public async updateUserPersonalInformation(
+    personalIBody: PersonalInformation,
+  ) {
+    const personalInformation: PersonalInformation =
+      await this.prisma.personalInformation.update({
+        where: { userId: personalIBody.userId },
+        data: {
+          birthDay: personalIBody.birthDay,
+          goal: personalIBody.goal,
+          height: personalIBody.height,
+          weight: personalIBody.weight,
+          gender: personalIBody.gender,
+        },
+      });
+    if (personalInformation) {
+      return personalInformation;
+    } else {
+      return this.errorMessage();
+    }
+  }
+
+  /****************************
+   * Upload profile photo
+   */
   async setProfile(file: Express.Multer.File, userId: number) {
     let uploadedResult: IImageUploadResponse;
     const curUser = await this.prismaService.user.findUnique({
@@ -158,6 +182,7 @@ export class UserService {
     userId: number,
     updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
+    console.log('update!');
     try {
       const updatedUser = await this.prismaService.user.update({
         where: { id: userId },
@@ -165,6 +190,7 @@ export class UserService {
           ...updateRequest,
         },
       });
+      console.log('updateUser', updatedUser);
       return UserResponse.fromUserEntity(updatedUser);
     } catch (err) {
       Logger.error(JSON.stringify(err));
