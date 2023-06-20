@@ -47,11 +47,9 @@ export class UserService {
   /****************************
    * Upload profile photo
    */
-  public async updateUserPersonalInformation(
-    personalIBody: PersonalInformation,
-  ) {
-    const personalInformation: PersonalInformation =
-      await this.prisma.personalInformation.update({
+  public async updateUserPersonalInformation(personalIBody: UpdateUserRequest) {
+    const personalInformation: UpdateUserRequest =
+      await this.prismaService.user.update({
         where: { userId: personalIBody.userId },
         data: {
           birthDay: personalIBody.birthDay,

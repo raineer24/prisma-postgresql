@@ -2,6 +2,7 @@ import { UserType } from '@prisma/client';
 import {
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -10,6 +11,10 @@ import {
 } from 'class-validator';
 
 export class UpdateUserRequest {
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
+
   @IsOptional()
   @IsNotEmpty()
   @Matches(RegExp('^[A-Za-zıöüçğşİÖÜÇĞŞñÑáéíóúÁÉÍÓÚ]+$'))
