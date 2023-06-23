@@ -175,7 +175,7 @@ export class UserService {
       const updatedUser = await this.prismaService.user.update({
         where: { id: userId },
         data: {
-          firstName: updateRequest.firstName,
+          ...updateRequest,
         },
       });
       console.log('updateUser', updatedUser);
