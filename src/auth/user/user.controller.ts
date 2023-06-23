@@ -16,6 +16,9 @@ import {
   Request,
   ParseIntPipe,
   HttpException,
+  Patch,
+  UseFilters,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from '../models/user';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -35,12 +38,38 @@ import {
 import { ITokenPayloadWithRefreshToken } from '../interfaces';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../../prisma/prisma.service';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 @Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly prismaService: PrismaService,
   ) {}
+
+  // @Put(':id')
+  // @UseFilters(HttpExceptionFilter)
+  // async update(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body('user') user: AuthUser,
+  // ): Promise<AuthUser> {
+  //   const res = await this.userService.update(id, user);
+  //   console.log('res', res);
+  //   if (res) {
+  //     return res;
+  //   }
+
+  //   throw new NotFoundException();
+  // }
+
+  // @Patch('user/personal-information')
+  // @UseGuards(RtGuard)
+  // updateUserPersonalInformation(
+  //   @Req() request,
+  //   @Body() personalIBody: PersonalInformation,
+  // ): Promise<PersonalInformation | HttpException> {
+  //   personalIBody.userId = request.user.sub;
+  //   return this.userService.updateUserPersonalInformation(personalIBody);
+  // }
 
   /********************************
    * desc      Upload
@@ -90,16 +119,31 @@ export class UserController {
     return updateRole;
   }
 
+  // @UseGuards(AccessTokenGuard, UserIsUserGuard)
+  // @Put(':id')
+  // @HttpCode(HttpStatus.OK)
+  // async updateUser(
+  //   @Param('id') id: number,
+  //   @Body() updateRequest: UpdateUserRequest,
+  //   @Usr() user: AuthUser,
+  // ): Promise<UserResponse> {
+  //   const userInfo = await this.userService.updateUser(id, updateRequest);
+  //   return userInfo;
+  // }
+
   @UseGuards(AccessTokenGuard, UserIsUserGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateRequest: UpdateUserRequest,
     @Usr() user: AuthUser,
   ): Promise<UserResponse> {
     const userInfo = await this.userService.updateUser(id, updateRequest);
-    return userInfo;
+    if (userInfo) {
+      return userInfo;
+    }
+    throw new NotFoundException();
   }
 
   //@Roles(UserType.ADMIN)

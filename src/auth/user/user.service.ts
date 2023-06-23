@@ -27,6 +27,8 @@ import {
 } from '../../features/interfaces';
 import { UserResponse } from '../../users/models/user.response';
 import { UpdateUserRequest } from '../../users/models/request/update-user-request.model';
+import { User as UserII } from '@prisma/client';
+import { AuthUser } from '../auth-user';
 
 @Injectable()
 export class UserService {
@@ -44,26 +46,13 @@ export class UserService {
     );
   }
 
-  /****************************
-   * Upload profile photo
-   */
-  public async updateUserPersonalInformation(personalIBody: UpdateUserRequest) {
-    const personalInformation: UpdateUserRequest =
-      await this.prismaService.user.update({
-        where: { userId: personalIBody.userId },
-        data: {
-          birthDay: personalIBody.birthDay,
-          goal: personalIBody.goal,
-          height: personalIBody.height,
-          weight: personalIBody.weight,
-          gender: personalIBody.gender,
-        },
-      });
-    if (personalInformation) {
-      return personalInformation;
-    } else {
-      return this.errorMessage();
-    }
+  update(id: number, user: AuthUser): Promise<AuthUser> {
+    const data = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+
+    return this.prismaService.user.update({ where: { id }, data });
   }
 
   /****************************
@@ -181,16 +170,18 @@ export class UserService {
     updateRequest: UpdateUserRequest,
   ): Promise<UserResponse> {
     console.log('update!');
+    console.log('updaterequest', updateRequest);
     try {
       const updatedUser = await this.prismaService.user.update({
         where: { id: userId },
         data: {
-          ...updateRequest,
+          firstName: updateRequest.firstName,
         },
       });
       console.log('updateUser', updatedUser);
-      return UserResponse.fromUserEntity(updatedUser);
+      return updatedUser;
     } catch (err) {
+      console.log('err', err);
       Logger.error(JSON.stringify(err));
       throw new ConflictException();
     }

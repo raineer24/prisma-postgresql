@@ -11,9 +11,9 @@ import {
 } from 'class-validator';
 
 export class UpdateUserRequest {
-  @IsNotEmpty()
-  @IsNumber()
-  userId: number;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // id: number;
 
   @IsOptional()
   @IsNotEmpty()
