@@ -95,7 +95,7 @@ export class UserService {
     });
 
     if (!newUser) throw new BadRequestException('User not found');
-
+    console.log('setprofile newUser', newUser);
     return newUser;
   }
 
