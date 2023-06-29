@@ -12,6 +12,7 @@ import {
   ValidateNested,
   ValidationArguments,
 } from 'class-validator';
+import { url } from 'inspector';
 import { PostI } from 'src/blog/models/post';
 const messages: any = {
   minPassword:
@@ -55,7 +56,7 @@ export class User {
 
   @IsOptional()
   @IsString()
-  theFirstDayOfWeek?: string;
+  image_url?: string;
 
   @IsOptional()
   @IsNumber()

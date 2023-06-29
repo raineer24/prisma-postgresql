@@ -94,9 +94,14 @@ export class UserService {
       },
     });
 
+  //   return this.userService.updateOne(user.id, {profileImage: file.filename}).pipe(
+  //     tap((user: User) => console.log(user)),
+  //     map((user:User) => ({profileImage: user.profileImage}))
+  // )
+
     if (!newUser) throw new BadRequestException('User not found');
     console.log('setprofile newUser', newUser);
-    return newUser;
+    return newUser.image_url;
   }
 
   async getUsers() {
