@@ -44,7 +44,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly prismaService: PrismaService,
-  ) { }
+  ) {}
 
   // @Put(':id')
   // @UseFilters(HttpExceptionFilter)
@@ -83,8 +83,9 @@ export class UserController {
   async setProfile(
     @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
-    @Request() req
+    @Request() req,
   ): Promise<any> {
+    console.log('file', file);
     const user: User = req.user;
     console.log('user controller upload', user);
 
