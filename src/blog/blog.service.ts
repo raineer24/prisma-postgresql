@@ -7,13 +7,36 @@ import { CreateBlogDto, EditBlogDto } from './dto';
 import { PostEntity } from './entities/post.entity';
 import { PostI } from './models/post';
 import { PostsRepository } from './repositories/post.repository';
+import { Paginate } from './paginate/paginate';
 
 @Injectable()
 export class BlogService {
   constructor(
     private prisma: PrismaService,
     private readonly repository: PostsRepository,
+    private paginate: Paginate,
   ) {}
+
+  async findAll(page: number, size: number, search: string) {
+    const { results, totalItems } = await this.paginate.pages(
+      page,
+      size,
+      search,
+    );
+    const totalPages = Math.ceil(totalItems / size) - 1;
+    const currentPage = Number(page);
+    return {
+      results,
+      pagination: {
+        length: totalItems,
+        size: size,
+        lastPage: totalPages,
+        page: currentPage,
+        startIndex: currentPage * size,
+        endIndex: currentPage * size + (size - 1),
+      },
+    };
+  }
 
   async createBlog(userId: number, dto: CreateBlogDto): Promise<PostEntity> {
     console.log('userid', userId);
@@ -62,9 +85,9 @@ export class BlogService {
     });
   }
 
-  findAll() {
-    return this.repository.findAll();
-  }
+  // findAll() {
+  //   return this.repository.findAll();
+  // }
 
   findOne(id: number) {
     return this.repository.findOne(id);
