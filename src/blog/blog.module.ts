@@ -5,10 +5,11 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { BlogController } from './blog.controller';
 import { BlogService } from './blog.service';
 import { PostsRepository } from './repositories/post.repository';
+import { Paginate } from './paginate/paginate';
 
 @Module({
   controllers: [BlogController],
-  providers: [BlogService, PrismaService, PostsRepository],
+  providers: [BlogService, PrismaService, PostsRepository, Paginate],
   exports: [BlogService],
   imports: [AuthModule],
 })
