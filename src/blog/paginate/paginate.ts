@@ -7,6 +7,9 @@ export class Paginate {
 
   async pages(page, size, search) {
     const results = await this.prisma.post.findMany({
+      include: {
+        author: true,
+      },
       skip: page * size,
       take: Number(size),
 

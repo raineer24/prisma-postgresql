@@ -59,23 +59,4 @@ export class UsersService {
       },
     };
   }
-
-  // async updateRoleOfUser(
-  //   userId: number,
-  //   updateRequest: UpdateUserRequest,
-  // ): Promise<UserResponse> {
-  //   try {
-  //     const updatedRole = await this.prisma.user.update({
-  //       data: { ...updateRequest },
-  //       where: {
-  //         id: userId,
-  //       },
-  //     });
-
-  //     return UserResponse.fromUserEntity(updatedRole);
-  //   } catch (err) {
-  //     Logger.error(JSON.stringify(err));
-  //     throw new ConflictException();
-  //   }
-  // }
 }
