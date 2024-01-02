@@ -8,6 +8,7 @@ import { PostEntity } from './entities/post.entity';
 import { PostI } from './models/post';
 import { PostsRepository } from './repositories/post.repository';
 import { Paginate } from './paginate/paginate';
+import { AppError } from 'src/errors/appError';
 
 @Injectable()
 export class BlogService {
@@ -93,13 +94,19 @@ export class BlogService {
     return this.repository.findOne(id);
   }
 
-  getPost(postId: number): Promise<PostI | HttpException> {
-    return this.prisma.post.findUnique({
+  async getPost(postId: number) {
+    const post = await this.prisma.post.findUnique({
       where: { id: postId },
       include: {
         author: true,
       },
     });
+    console.log('post,', post);
+    if (!post) {
+      throw new AppError('Post not found');
+    }
+
+    return post;
   }
 
   async deleteBlog(userId: number, blogId: number) {

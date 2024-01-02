@@ -54,17 +54,6 @@ export class BlogController {
     return this.blogService.createBlog(userId, dto);
   }
 
-  // @Get()
-  // findBlogEntries(@Query('userId', ParseIntPipe) userId: number) {
-  //   console.log('userid', userId);
-  //   if (userId == null) {
-  //     console.log('null');
-  //     return this.blogService.findAll();
-  //   } else {
-  //     return this.blogService.getBlogbyId(userId);
-  //   }
-  // }
-
   @Get('pages?')
   async findAll(@Request() request) {
     return await this.blogService.findAll(
@@ -76,17 +65,22 @@ export class BlogController {
 
   @Get(':postId')
   @UseGuards(AccessTokenGuard)
-  getPost(
+  async getPost(
     @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostI | HttpException> {
-    if (!postId) {
-      throw new HttpException(
-        'There is a problem. Please try again later what you want to do..',
-        HttpStatus.NOT_IMPLEMENTED,
-      );
-    }
-    return this.blogService.getPost(postId);
+    // if (!postId) {
+    //   throw new HttpException(
+    //     'There is a problem. Please try again later what you want to do..',
+    //     HttpStatus.NOT_IMPLEMENTED,
+    //   );
+    // }
+    return await this.blogService.getPost(postId);
   }
+
+  // @Get(':id')
+  // async findOne(@Param('postId', ParseIntPipe) postId: number) {
+  //   return await this.blogService.getPost(postId);
+  // }
 
   @Delete(':id')
   @UseGuards(AccessTokenGuard)
