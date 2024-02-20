@@ -1,4 +1,8 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions/forbidden.exception';
 import { Prisma } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
@@ -18,20 +22,31 @@ export class BlogService {
     private paginate: Paginate,
   ) {}
 
+  async getAll() {
+    try {
+      const result = await this.prisma.post.findMany({
+        include: {
+          author: true,
+        },
+      });
+
+      return result;
+    } catch (error) {
+      console.log('[GET ALL POSTS] Error.\n', error);
+      throw new InternalServerErrorException('Failed to get all posts');
+    }
+  }
+
   async findAll(page: number, size: number, search: string) {
-    const { results, totalItems } = await this.paginate.pages(
-      page,
-      size,
-      search,
-    );
-    const totalPages = Math.ceil(totalItems / size) - 1;
+    const { results } = await this.paginate.pages(page, size);
+    // const totalPages = Math.ceil(totalItems / size) - 1;
     const currentPage = Number(page);
     return {
       results,
       pagination: {
-        length: totalItems,
+        // length: totalItems,
         size: size,
-        lastPage: totalPages,
+        // lastPage: totalPages,
         page: currentPage,
         startIndex: currentPage * size,
         endIndex: currentPage * size + (size - 1),
