@@ -36,6 +36,10 @@ export class BlogController {
   //   return this.blogService.getBlogs(userId);
   // }
 
+  async getAll() {
+    return await this.blogService.getAll();
+  }
+
   @Patch(':id')
   @UseGuards(AccessTokenGuard, UserIsUserGuard)
   editBlogById(
