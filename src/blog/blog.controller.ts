@@ -36,6 +36,7 @@ export class BlogController {
   //   return this.blogService.getBlogs(userId);
   // }
 
+  @Get('')
   async getAll() {
     return await this.blogService.getAll();
   }
